@@ -70,6 +70,12 @@
                         case 'post':
                             this.postFile()
                             break
+                        case 'delete':
+                            this.deleteFile()
+                            break
+                        case 'rename':
+                            this.renameFile()
+                            break
                     }
                 }
             },
@@ -104,6 +110,24 @@
                 this.$emit('rightMenuFade', true)
             },
             postFile() {
+                this.$emit('filePost')
+                this.$emit('rightMenuFade', true)
+            },
+            deleteFile() {
+                store.commit('saveFileOperate', {
+                        path: this.currentPath,
+                        operateKind: 'delete'
+                    }
+                )
+                this.$emit('filePost')
+                this.$emit('rightMenuFade', true)
+            },
+            renameFile() {
+                store.commit('saveFileOperate', {
+                        path: this.currentPath,
+                        operateKind: 'rename'
+                    }
+                )
                 this.$emit('filePost')
                 this.$emit('rightMenuFade', true)
             }

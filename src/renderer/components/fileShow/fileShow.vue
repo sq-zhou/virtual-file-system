@@ -125,7 +125,16 @@
             },
             filePostToFileTree() {
                 let fileOperate = store.state.fileOperate
-                this.fileTree.copyNode(this.currentPath, fileOperate.path)
+                if (fileOperate.operateKind === 'copy') {
+                    this.fileTree.copyNode(this.currentPath, fileOperate.path)
+                } else if (fileOperate.operateKind === 'cut') {
+                    this.fileTree.cutNode(this.currentPath, fileOperate.path)
+                } else if (fileOperate.operateKind === 'delete') {
+                    this.fileTree.deleteNode(fileOperate.path)
+                } else if (fileOperate.operateKind === 'rename') {
+                    console.log('rename')
+                    this.fileTree.renameNode()
+                }
                 this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
                 store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
             }

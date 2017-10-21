@@ -49,12 +49,20 @@
                         name: '粘贴'
                     },
                     {
-                        kind: 'newFile-file',
-                        name: '新建文件夹'
+                        kind: 'delete',
+                        name: '删除'
+                    },
+                    {
+                        kind: 'rename',
+                        name: '重命名'
                     },
                     {
                         kind: 'newFile-txt',
                         name: '新建文本'
+                    },
+                    {
+                        kind: 'newFile-file',
+                        name: '新建文件夹'
                     }
                 ]
             }

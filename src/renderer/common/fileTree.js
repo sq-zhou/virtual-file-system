@@ -145,15 +145,52 @@ export class FileTree {
     }
 
     insertNode(node) {
-        node.arrayId = this._treeNodeArray.length
-        this._treeNodeArray.push(node.getTreeNode()) // 节点插入
+        node.title = this.rename(node.title, node.fileKind, this.getChildrenNodeList(this.getParentNode(node).arrayId), 1, node.title) // 重命名检索
         let pareNode = this.getParentNode(node)
         pareNode.childNodeList.push(node.arrayId)
+        node.arrayId = this._treeNodeArray.length
+        this._treeNodeArray.push(node.getTreeNode()) // 节点插入
     }
 
     copyTreeNode(treeNode) {
         let oneTreeNode = new TreeNode(treeNode.fatNum, treeNode.fileKind, treeNode.parentNode, treeNode.content, treeNode.title, this._treeNodeArray.length)
         return oneTreeNode
+    }
+
+    rename(name, fileKind, array, index, originName) {
+        let temName
+        for (let item of array) {
+            if (name === item.title && fileKind === item.fileKind) {
+                temName = originName + '(' + index + ')'
+                index++
+                temName = this.rename(temName, fileKind, array, index, originName)
+                return temName
+            }
+        }
+        temName = name
+        return temName
+    }
+
+    renameNode(currentArrayId) {
+        let name = 'downlod'
+        console.log(this.rename(name, 'txt', this.getChildrenNodeList(0), 1, name))
+    }
+
+    deleteNode(currentArrayId) {
+        let node = this._treeNodeArray[currentArrayId]
+        let lastPareNode = this._treeNodeArray[node.parentNode] // 在旧的父节点中删除节点
+        node.parentNode = ''
+        let index = lastPareNode.childNodeList.indexOf(currentArrayId)
+        lastPareNode.childNodeList.splice(index, 1)
+    }
+
+    cutNode(parentArrayId, currentArrayId) {
+        let node = this._treeNodeArray[currentArrayId]
+        let lastPareNode = this._treeNodeArray[node.parentNode] // 在旧的父节点中删除节点
+        let index = lastPareNode.childNodeList.indexOf(currentArrayId)
+        lastPareNode.childNodeList.splice(index, 1)
+        node.parentNode = parentArrayId
+        this._treeNodeArray[parentArrayId].childNodeList.push(currentArrayId) // 在新的父节点中添加该节点
     }
 
     copyNode(parentArrayId, currentArrayId) {
@@ -165,15 +202,14 @@ export class FileTree {
         let copyErgodic = (childNodeList, pareNode) => {
             for (let i of childNodeList) {
                 let oneTreeNode = this.copyTreeNode(this._treeNodeArray[i])
+                oneTreeNode.parentNode = pareNode.arrayId
+                this.insertNode(oneTreeNode)
                 if (this._treeNodeArray[i].childNodeList) {
                     copyErgodic(this._treeNodeArray[i].childNodeList, oneTreeNode)
                 }
-                oneTreeNode.parentNode = pareNode.arrayId
-                this.insertNode(oneTreeNode)
             }
         }
         copyErgodic(childNodeList, pareNode)
-        console.log(this._treeNodeArray)
     }
 
     getFileTreeDir() {
@@ -259,6 +295,8 @@ export const initFileTree = function (FileTree) {
     let TreeNode7 = new TreeNode(2, 'dir', 3, '7', 'software', 7)
     let TreeNode8 = new TreeNode(2, 'txt', 3, '8', 'learn', 8)
     let TreeNode9 = new TreeNode(2, 'txt', 7, '9', 'wechat', 9)
+    // let TreeNode10 = new TreeNode(2, 'dir', 0, '10', 'download(1)', 10)
+    // let TreeNode11 = new TreeNode(2, 'txt', 0, '11', 'download', 11)
     fileTree.insertNode(TreeNode1)
     fileTree.insertNode(TreeNode2)
     fileTree.insertNode(TreeNode3)
@@ -268,4 +306,6 @@ export const initFileTree = function (FileTree) {
     fileTree.insertNode(TreeNode7)
     fileTree.insertNode(TreeNode8)
     fileTree.insertNode(TreeNode9)
+    // fileTree.insertNode(TreeNode10)
+    // fileTree.insertNode(TreeNode11)
 }
