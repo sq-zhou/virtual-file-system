@@ -1,8 +1,8 @@
 <template>
-    <div class="fileRename">
+    <div class="fileRename" @mousedown.stop="clickStop">
         <div class="model-normal">
             <div class="model-normal-header">
-                <a class="model-name">重命名</a>
+                <a class="model-name">文件名</a>
                 <div class="model-close"><i class="fa fa-close"></i></div>
             </div>
             <div class="model-normal-middle">
@@ -35,8 +35,10 @@
                 this.$emit('fileRenameShow', false, this.$refs.inputValue.value)
             },
             cancel() {
-                this.$emit('fileRenameShow', false)
+                this.$emit('fileRenameShow', true)
                 this.$refs.inputValue.value = ''
+            },
+            clickStop() {
             }
         }
     }

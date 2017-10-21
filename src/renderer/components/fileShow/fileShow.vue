@@ -7,7 +7,8 @@
                 <div class="size"><span>大小</span></div>
             </div>
             <file-item v-for="item in itemTotal" :fileNodeItem="item"
-                       @showByFileItemPath="showByCurrentPath" @filePost="filePostToFileTree"></file-item>
+                       @fileRenameShow="fileRenameChange" @showByFileItemPath="showByCurrentPath"
+                       @filePost="filePostToFileTree"></file-item>
         </div>
         <right-click-menu :currentPath="currentPath" :currentEvent="currentEvent" :rightMenuData="rightMenuData"
                           v-if="rightMenuFlag" @fileRenameShow="fileRenameChange" @filePost="filePostToFileTree"
@@ -85,10 +86,10 @@
                     this.rightMenuFlag = false
                     this.fileRenameFlag = true
                     if (data) {
-                        this.operateFile = data // 发送操作的数据
+                        this.operateFile = data // 发送操作的数据 newFile-txt newFile-dir rename
                     }
                 } else {
-                    if (data) {
+                    if (data) { // 注意这是没有按了确认键的操作
                         this.operateFileMethod(data)
                     }
                     this.rightMenuFlag = false
@@ -111,6 +112,12 @@
                     this.fileTree.insertNode(temTreeNode)
                     this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
                     store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
+                } else if (this.operateFile === 'rename') {
+                    let arrayId = store.state.rightClickMenuPath
+                    this.fileTree.renameNode(arrayId, data)
+                    this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
+                    store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
+                    store.commit('saveRightClickMenuPath', '') // 用到vuex
                 }
             },
             setRightClickFade(flag) {

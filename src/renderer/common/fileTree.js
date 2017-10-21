@@ -171,9 +171,9 @@ export class FileTree {
         return temName
     }
 
-    renameNode(currentArrayId) {
-        let name = 'downlod'
-        console.log(this.rename(name, 'txt', this.getChildrenNodeList(0), 1, name))
+    renameNode(arrayId, name) {
+        let node = this.getPointNode(arrayId)
+        node.title = this.rename(name, node.fileKind, this.getChildrenNodeList(this.getParentNode(node).arrayId), 1, name)
     }
 
     deleteNode(currentArrayId) {

@@ -74,7 +74,7 @@
                             this.deleteFile()
                             break
                         case 'rename':
-                            this.renameFile()
+                            this.newFile(kind)
                             break
                     }
                 }

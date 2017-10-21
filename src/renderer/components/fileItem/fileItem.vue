@@ -6,7 +6,7 @@
         <div class="name"><span>{{fileNodeItem.title}}</span></div>
         <div class="time"><span>{{fileNodeItem.createTime}}</span></div>
         <div class="size"><span>{{fileNodeItem.size}}</span></div>
-        <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu"
+        <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu" @fileRenameShow="fileRenameToFileShow"
                           :rightMenuData="rightMenuData" @rightMenuFade="setRightClickFade" @filePost="filePostToFileShow"
                           v-if="rightMenuFlag"></right-click-menu>
     </div>
@@ -114,6 +114,9 @@
             },
             filePostToFileShow() { // 中转站，发送子组件的filePost操作给父组件
                 this.$emit('filePost')
+            },
+            fileRenameToFileShow(flag, data) {
+                this.$emit('fileRenameShow', flag, data)
             }
         }
     }
