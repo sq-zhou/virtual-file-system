@@ -8,7 +8,7 @@
         </div>
         <div class="nav-right">
             <div class="nav-path-name">
-                <span class="pathPart">{{currentPath}}</span>
+                <span class="pathPart">{{ path }}</span>
             </div>
         </div>
     </div>
@@ -28,6 +28,9 @@
         computed: {
             getCurrentPath() {
                 return this.$store.state.msgOfCurrentPath
+            },
+            path() {
+                return this.$store.state.path
             }
         },
         methods: {

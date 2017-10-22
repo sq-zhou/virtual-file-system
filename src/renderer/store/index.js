@@ -9,6 +9,9 @@
 * */
 import Vue from 'vue'
 import Vuex from 'vuex'
+const zfs = require('zfs-js')
+
+zfs.connect('test.disk')
 
 Vue.use(Vuex)
 // 首先声明一个状态 state
@@ -26,10 +29,26 @@ const state = {
     // 文件的选择当前路径,为文件树现行的arrayId
     msgOfCurrentPath: {},
     // 文件树
-    treeNodeArray: {}
+    treeNodeArray: {},
+
+    path: '/',
+    fileItems: zfs.listdir('/')
 }
 // 然后给 actions 注册一个事件处理函数，当这个函数被触发时，将状态提交到 mutaions中处理
 const actions = {
+    newFile({commit}, {showPath, filePath}) {
+        let fd = zfs.open(filePath, zfs.ZFILE_FLAG_WRITE)
+        zfs.close(fd)
+        commit('setFileItems', zfs.listdir(showPath))
+    },
+    createDir({commit}, {showPath, dirPath}) {
+        zfs.createdir(dirPath)
+        commit('setFileItems', zfs.listdir(showPath))
+    },
+    changeDir({commit}, showPath) {
+        commit('setPath', showPath)
+        commit('setFileItems', zfs.listdir(showPath))
+    },
     saveDataFileTextObj({commit}, msg) {
         commit('saveFileTextObj', msg)
     },
@@ -54,6 +73,15 @@ const actions = {
 }
 // 更新状态
 const mutations = {
+    setPath(state, path) {
+        state.path = path
+    },
+    addFileItem(state, fileItem) {
+        state.fileItems.push(fileItem)
+    },
+    setFileItems(state, fileItems) {
+        state.fileItems = fileItems
+    },
     saveFileTextObj(state, msg) {
         state.fileTextObj = msg
     },

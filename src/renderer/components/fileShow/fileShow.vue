@@ -1,12 +1,12 @@
 <template>
     <div class="file-show" @mousedown="makeSureMouseDown($event)">
-        <div class="file-inner" @click="">
+        <div class="file-inner">
             <div class="file-intro">
                 <div class="name"><span>名称</span></div>
                 <div class="time"><span>修改时间</span></div>
                 <div class="size"><span>大小</span></div>
             </div>
-            <file-item v-for="item in itemTotal" :fileNodeItem="item"
+            <file-item v-for="item in fileItems" :fileNodeItem="item" :key="item.name"
                        @fileRenameShow="fileRenameChange" @showByFileItemPath="showByCurrentPath"
                        @filePost="filePostToFileTree"></file-item>
         </div>
@@ -24,7 +24,6 @@
     import fileFrameText from '../fileFrame/fileText'
     import fileRename from '../fileFrame/fileRename'
     import rightClickMenu from '../rightClickMenu/rightClickMenu'
-    import {TreeNode, FileTree, initFileTree} from '../../common/fileTree'
     import store from '../../store/index'
 
     export default {
@@ -57,6 +56,9 @@
         computed: {
             getCurrentPath() {
                 return this.$store.state.msgOfCurrentPath
+            },
+            fileItems() {
+                return this.$store.state.fileItems
             }
         },
         components: {
@@ -103,17 +105,13 @@
             },
             operateFileMethod(data) {
                 if (this.operateFile === 'newFile-txt') {
-                    let temTreeNode = new TreeNode('1', 'txt', this.currentPath, '', data, this.fileTree.treeNodeArray.length)
-                    this.fileTree.insertNode(temTreeNode)
-                    this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
-                    store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
-                    store.commit('saveRightClickMenuPath', '') // 用到vuex
+                    let showPath = store.state.path
+                    let filePath = showPath + data
+                    store.dispatch('newFile', {showPath, filePath})
                 } else if (this.operateFile === 'newFile-dir') {
-                    let temTreeNode = new TreeNode('1', 'dir', this.currentPath, '', data, this.fileTree.treeNodeArray.length)
-                    this.fileTree.insertNode(temTreeNode)
-                    this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
-                    store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
-                    store.commit('saveRightClickMenuPath', '') // 用到vuex
+                    let showPath = store.state.path
+                    let dirPath = showPath + data
+                    store.dispatch('createDir', {showPath, dirPath})
                 } else if (this.operateFile === 'rename') {
                     let arrayId = store.state.rightClickMenuPath
                     this.fileTree.renameNode(arrayId, data)
@@ -150,8 +148,6 @@
         },
         created() {
             this.currentPath = 0
-            this.fileTree = new FileTree()
-            initFileTree(this.fileTree)
             this.itemTotal = this.fileTree.getChildrenNodeList(0)
             store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
         },

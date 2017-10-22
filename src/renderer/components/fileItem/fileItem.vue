@@ -3,9 +3,9 @@
         <div class="logo">
             <i :class="setLogoClass"></i>
         </div>
-        <div class="name"><span>{{fileNodeItem.title}}</span></div>
-        <div class="time"><span>{{fileNodeItem.createTime}}</span></div>
-        <div class="size"><span>{{fileNodeItem.size}}</span></div>
+        <div class="name"><span>{{ fileNodeItem.name }}</span></div>
+        <div class="time"><span>{{ fileNodeItem.created_time }}</span></div>
+        <div class="size"><span>{{ fileNodeItem.size}}</span></div>
         <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu" @fileRenameShow="fileRenameToFileShow"
                           :rightMenuData="rightMenuData" @rightMenuFade="setRightClickFade" @filePost="filePostToFileShow"
                           v-if="rightMenuFlag"></right-click-menu>
@@ -96,15 +96,28 @@
                         this.rightMenuFlag = false
                         return
                     }
-                    if (this.fileNodeItem.fileKind === 'dir') {
-                        this.$emit('showByFileItemPath', this.fileNodeItem.arrayId)
-                    } else {
-                        let treeNodeArray = store.state.treeNodeArray
-                        let arrayId = this.fileNodeItem.arrayId
-                        let text = treeNodeArray[arrayId].content
-                        store.commit('saveFileTextObj', {text, arrayId})
-                        store.commit('saveFileTextFlag', true) // 用到vuex
+
+                    let item = this.fileNodeItem
+                    if (item.type === 0x1) { // is a dir
+                        let currentPath = store.state.path
+                        let showPath = currentPath
+                        if (currentPath === '/') {
+                            showPath += item.name
+                        } else {
+                            showPath += '/' + item.name
+                        }
+                        store.dispatch('changeDir', showPath)
                     }
+
+                    // if (this.fileNodeItem.fileKind === 'dir') {
+                    //     this.$emit('showByFileItemPath', this.fileNodeItem.arrayId)
+                    // } else {
+                    //     let treeNodeArray = store.state.treeNodeArray
+                    //     let arrayId = this.fileNodeItem.arrayId
+                    //     let text = treeNodeArray[arrayId].content
+                    //     store.commit('saveFileTextObj', {text, arrayId})
+                    //     store.commit('saveFileTextFlag', true) // 用到vuex
+                    // }
                 }
             },
             setRightClickFade(flag) {
