@@ -3,19 +3,16 @@
         <div class="disk-cont">
             <div class="title">磁盘使用情况</div>
             <div class="disk-wrapper">
-               <div class="disk-inner">
-                   <div class="disk-piece" v-for="i in FatLength">{{i}}</div>
-               </div>
+                <table>
+                    <tbody>
+                        <tr v-for="row in table">
+                            <td v-for="col in row" :key="col">
+                                {{ col }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
-        <div class="FAT-cont">
-            <div class="title">文件分配表</div>
-            <table border="1">
-                <tr v-for="i in FatLength">
-                    <td>{{i}}</td>
-                    <td>0</td>
-                </tr>
-            </table>
         </div>
     </div>
 </template>
@@ -26,6 +23,11 @@
         data() {
             return {
                 FatLength: 127
+            }
+        },
+        computed: {
+            table() {
+                return this.$store.state.FATTable
             }
         }
     }

@@ -156,11 +156,6 @@
                 store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
             }
         },
-        created() {
-            this.currentPath = 0
-            this.itemTotal = this.fileTree.getChildrenNodeList(0)
-            store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
-        },
         watch: {
             getCurrentPath(arrayId) {
                 this.currentPath = arrayId

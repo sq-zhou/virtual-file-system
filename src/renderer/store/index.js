@@ -9,6 +9,7 @@
 * */
 import Vue from 'vue'
 import Vuex from 'vuex'
+const _ = require('lodash')
 const zfs = require('zfs-js')
 
 zfs.connect('test.disk')
@@ -32,8 +33,11 @@ const state = {
     treeNodeArray: {},
 
     path: '/',
-    fileItems: zfs.listdir('/')
+    fileItems: zfs.listdir('/'),
+    FATTable: _.chunk(zfs.getFATBuffer(), 8)
 }
+
+console.log(zfs.getFATBuffer())
 
 let pathHistory = [
     '/'
@@ -41,14 +45,20 @@ let pathHistory = [
 
 // 然后给 actions 注册一个事件处理函数，当这个函数被触发时，将状态提交到 mutaions中处理
 const actions = {
+    loadFAT({commit}) {
+        let buffer = zfs.getFATBuffer()
+        commit('setFAT', _.chunk(buffer, 8))
+    },
     newFile({commit}, {showPath, filePath}) {
         let fd = zfs.open(filePath, zfs.ZFILE_FLAG_WRITE)
         zfs.close(fd)
         commit('setFileItems', zfs.listdir(showPath))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
     },
     createDir({commit}, {showPath, dirPath}) {
         zfs.createdir(dirPath)
         commit('setFileItems', zfs.listdir(showPath))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
     },
     changeDir({commit}, showPath) {
         pathHistory.push(showPath)
@@ -87,6 +97,9 @@ const actions = {
 }
 // 更新状态
 const mutations = {
+    setFAT(state, fat) {
+        state.FATTable = fat
+    },
     setPath(state, path) {
         state.path = path
     },
