@@ -1,5 +1,5 @@
 <template>
-    <div class="file-item" @mousedown.stop="mouseRightClick($event)">
+    <div class="file-item" :class="{'file-item-background':fileItemChoose}" @mousedown.stop="mouseRightClick($event)">
         <div class="logo">
             <i :class="setLogoClass"></i>
         </div>
@@ -29,6 +29,8 @@
         data() {
             return {
                 logoClass: 'fa fa-file',
+                clickNumer: 0,
+                fileItemChoose: false,
                 currentEventToRightMenu: null,
                 rightMenuFlag: false,
                 rightMenuData: [
@@ -76,6 +78,9 @@
                     this.logoClass = 'fa fa-file-text-o'
                 }
                 return this.logoClass
+            },
+            getRightClickMenuPath() {
+                return this.$store.state.rightClickMenuPath
             }
         },
         methods: {
@@ -92,9 +97,19 @@
                     this.senMsgToRightMenu(event)
                     store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
                 } else if (event.button === 0) { // 鼠标左击
-                    if (this.rightMenuFlag === true) {
-                        this.rightMenuFlag = false
-                        return
+                    this.checkClick(event)
+                }
+            },
+            checkClick(event) {
+                this.clickNumer += 1
+                this.fileItemChoose = true
+                store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
+                window.setTimeout(() => {
+                    if (this.clickNumer === 1) {
+                        this.clickNumer = 0
+                    } else if (this.clickNumer) {
+                        this.dbClick(event)
+                        this.clickNumer = 0
                     }
 
                     let item = this.fileNodeItem
@@ -119,6 +134,15 @@
                     //     store.commit('saveFileTextFlag', true) // 用到vuex
                     // }
                 }
+                if (this.fileNodeItem.fileKind === 'dir') {
+                    this.$emit('showByFileItemPath', this.fileNodeItem.arrayId)
+                } else {
+                    let treeNodeArray = store.state.treeNodeArray
+                    let arrayId = this.fileNodeItem.arrayId
+                    let text = treeNodeArray[arrayId].content
+                    store.commit('saveFileTextObj', {text, arrayId})
+                    store.commit('saveFileTextFlag', true) // 用到vuex
+                }
             },
             setRightClickFade(flag) {
                 if (flag) {
@@ -131,12 +155,22 @@
             fileRenameToFileShow(flag, data) {
                 this.$emit('fileRenameShow', flag, data)
             }
+        },
+        watch: {
+            getRightClickMenuPath(val) {
+                if (val === this.fileNodeItem.arrayId) {
+                    this.fileItemChoose = true
+                } else {
+                    this.fileItemChoose = false
+                }
+            }
         }
     }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
     @import '../../assets/font-awesome-4.7.0/css/font-awesome.min.css'
+    @import '../../assets/stylus/public.styl'
     .file-item
         position: relative
         box-sizing: border-box
@@ -150,6 +184,7 @@
             width: 15px
             text-align: center
             vertical-align: middle
+            color: #4c444a
         .name
             display: inline-block
             margin: 0 0 0 10px
@@ -168,7 +203,7 @@
             font-size: 14px
         .size
             display: inline-block
-            width: 100px
+            width: 170px
             text-align: right
             font-size: 14px
 </style>

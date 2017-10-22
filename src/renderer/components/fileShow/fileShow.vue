@@ -171,7 +171,7 @@
         overflow: auto
         .file-inner
             width: 100%
-            min-width: 675px;
+            min-width: 700px;
             height: 100%
             display: flex
             flex-flow: row wrap
@@ -193,7 +193,7 @@
                         margin: 0 0 0 5px
                 .size
                     display: inline-block
-                    width: 105px
+                    width: 175px
                     text-align: right
 
 </style>
