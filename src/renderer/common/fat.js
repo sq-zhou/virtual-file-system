@@ -31,4 +31,13 @@ export class fatTable {
             }
         }
     }
+
+    removeOneNode(arrayIdOfTreeNode) {
+        for (let i of this._tableList) {
+            if (this._tableList[i].arrayIdOfTreeNode === arrayIdOfTreeNode) {
+                this._tableList[i].arrayIdOfTreeNode = ''
+                this._tableList[i].isEmpty = false
+            }
+        }
+    }
 }

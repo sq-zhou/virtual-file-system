@@ -23,10 +23,6 @@
         props: {
             fileNodeItem: {
                 type: Object
-            },
-            fileItemChoose: {
-                type: Boolean,
-                default: false
             }
         },
         components: {
@@ -35,6 +31,8 @@
         data() {
             return {
                 logoClass: 'fa fa-file',
+                clickNumer: 0,
+                fileItemChoose: false,
                 currentEventToRightMenu: null,
                 rightMenuFlag: false,
                 rightMenuData: [
@@ -101,19 +99,35 @@
                     this.senMsgToRightMenu(event)
                     store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
                 } else if (event.button === 0) { // 鼠标左击
-                    if (this.rightMenuFlag === true) {
-                        this.rightMenuFlag = false
-                        return
+                    this.checkClick(event)
+                }
+            },
+            checkClick(event) {
+                this.clickNumer += 1
+                this.fileItemChoose = true
+                store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
+                window.setTimeout(() => {
+                    if (this.clickNumer === 1) {
+                        this.clickNumer = 0
+                    } else if (this.clickNumer) {
+                        this.dbClick(event)
+                        this.clickNumer = 0
                     }
-                    if (this.fileNodeItem.fileKind === 'dir') {
-                        this.$emit('showByFileItemPath', this.fileNodeItem.arrayId)
-                    } else {
-                        let treeNodeArray = store.state.treeNodeArray
-                        let arrayId = this.fileNodeItem.arrayId
-                        let text = treeNodeArray[arrayId].content
-                        store.commit('saveFileTextObj', {text, arrayId})
-                        store.commit('saveFileTextFlag', true) // 用到vuex
-                    }
+                }, 500)
+            },
+            dbClick(event) {
+                if (this.rightMenuFlag === true) {
+                    this.rightMenuFlag = false
+                    return
+                }
+                if (this.fileNodeItem.fileKind === 'dir') {
+                    this.$emit('showByFileItemPath', this.fileNodeItem.arrayId)
+                } else {
+                    let treeNodeArray = store.state.treeNodeArray
+                    let arrayId = this.fileNodeItem.arrayId
+                    let text = treeNodeArray[arrayId].content
+                    store.commit('saveFileTextObj', {text, arrayId})
+                    store.commit('saveFileTextFlag', true) // 用到vuex
                 }
             },
             setRightClickFade(flag) {
