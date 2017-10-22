@@ -104,46 +104,29 @@
                 this.clickNumer += 1
                 this.fileItemChoose = true
                 store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
-                window.setTimeout(() => {
-                    if (this.clickNumer === 1) {
-                        this.clickNumer = 0
-                    } else if (this.clickNumer) {
-                        this.dbClick(event)
-                        this.clickNumer = 0
-                    }
 
-                    let item = this.fileNodeItem
-                    if (item.type === 0x1) { // is a dir
-                        let currentPath = store.state.path
-                        let showPath = currentPath
-                        if (currentPath === '/') {
-                            showPath += item.name
-                        } else {
-                            showPath += '/' + item.name
-                        }
-                        store.dispatch('changeDir', showPath)
-                    }
-
-                    // if (this.fileNodeItem.fileKind === 'dir') {
-                    //     this.$emit('showByFileItemPath', this.fileNodeItem.arrayId)
-                    // } else {
-                    //     let treeNodeArray = store.state.treeNodeArray
-                    //     let arrayId = this.fileNodeItem.arrayId
-                    //     let text = treeNodeArray[arrayId].content
-                    //     store.commit('saveFileTextObj', {text, arrayId})
-                    //     store.commit('saveFileTextFlag', true) // 用到vuex
-                    // }
+                if (this.clickNumer === 1) {
+                    this.clickNumer = 0
+                } else if (this.clickNumer) {
+                    this.dbClick(event)
+                    this.clickNumer = 0
                 }
-                if (this.fileNodeItem.fileKind === 'dir') {
-                    this.$emit('showByFileItemPath', this.fileNodeItem.arrayId)
-                } else {
-                    let treeNodeArray = store.state.treeNodeArray
-                    let arrayId = this.fileNodeItem.arrayId
-                    let text = treeNodeArray[arrayId].content
-                    store.commit('saveFileTextObj', {text, arrayId})
-                    store.commit('saveFileTextFlag', true) // 用到vuex
+
+                let item = this.fileNodeItem
+                if (item.type === 0x1) { // is a dir
+                    let currentPath = store.state.path
+                    let showPath = currentPath
+                    if (currentPath === '/') {
+                        showPath += item.name
+                    } else {
+                        showPath += '/' + item.name
+                    }
+                    store.dispatch('changeDir', showPath)
+                } else if (item.type === 0x0) { // is a file
+                //  something
                 }
             },
+
             setRightClickFade(flag) {
                 if (flag) {
                     this.rightMenuFlag = false

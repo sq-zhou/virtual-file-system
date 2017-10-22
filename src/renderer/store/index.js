@@ -34,6 +34,11 @@ const state = {
     path: '/',
     fileItems: zfs.listdir('/')
 }
+
+let pathHistory = [
+    '/'
+]
+
 // 然后给 actions 注册一个事件处理函数，当这个函数被触发时，将状态提交到 mutaions中处理
 const actions = {
     newFile({commit}, {showPath, filePath}) {
@@ -46,8 +51,17 @@ const actions = {
         commit('setFileItems', zfs.listdir(showPath))
     },
     changeDir({commit}, showPath) {
+        pathHistory.push(showPath)
         commit('setPath', showPath)
         commit('setFileItems', zfs.listdir(showPath))
+    },
+    pathGoBackHistory({commit}) {
+        if (pathHistory.length >= 2) {
+            let path = pathHistory[pathHistory.length - 2]
+            pathHistory.length--
+            commit('setPath', path)
+            commit('setFileItems', zfs.listdir(path))
+        }
     },
     saveDataFileTextObj({commit}, msg) {
         commit('saveFileTextObj', msg)

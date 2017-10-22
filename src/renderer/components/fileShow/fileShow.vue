@@ -106,11 +106,21 @@
             operateFileMethod(data) {
                 if (this.operateFile === 'newFile-txt') {
                     let showPath = store.state.path
-                    let filePath = showPath + data
+                    let filePath = showPath
+                    if (showPath === '/') {
+                        filePath += data
+                    } else {
+                        filePath += '/' + data
+                    }
                     store.dispatch('newFile', {showPath, filePath})
                 } else if (this.operateFile === 'newFile-dir') {
                     let showPath = store.state.path
-                    let dirPath = showPath + data
+                    let dirPath = showPath
+                    if (showPath === '/') {
+                        dirPath += data
+                    } else {
+                        dirPath += '/' + data
+                    }
                     store.dispatch('createDir', {showPath, dirPath})
                 } else if (this.operateFile === 'rename') {
                     let arrayId = store.state.rightClickMenuPath
