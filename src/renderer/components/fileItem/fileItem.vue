@@ -15,6 +15,7 @@
 <script>
     import rightClickMenu from '../rightClickMenu/rightClickMenu'
     import store from '../../store/index'
+    const path = require('path')
 
     export default {
         name: 'file-item',
@@ -115,12 +116,7 @@
                 let item = this.fileNodeItem
                 if (item.type === 0x1) { // is a dir
                     let currentPath = store.state.path
-                    let showPath = currentPath
-                    if (currentPath === '/') {
-                        showPath += item.name
-                    } else {
-                        showPath += '/' + item.name
-                    }
+                    let showPath = path.posix.join(currentPath, item.name)
                     store.dispatch('changeDir', showPath)
                 } else if (item.type === 0x0) { // is a file
                 //  something
