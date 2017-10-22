@@ -147,6 +147,7 @@
         position: absolute
         box-shadow: 1px 1px 1px 1px #0bb0e6
         background: #ffffff
+        color: black
         z-index: 10
         .menu-item
             font-size: 14px

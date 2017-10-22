@@ -130,6 +130,7 @@ export class FileTree {
 
     _initRootNode() {
         let rootNode = new TreeNode('1', 'dir', null, '', 'system', 0)
+        rootNode.path = 'system'
         this._treeNodeArray.push(rootNode.getTreeNode())
     }
 

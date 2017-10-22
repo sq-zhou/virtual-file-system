@@ -1,13 +1,15 @@
 <template>
-    <div class="file-item" @mousedown.stop="mouseRightClick($event)">
+    <div class="file-item" :class="{'file-item-background':fileItemChoose}" @mousedown.stop="mouseRightClick($event)">
         <div class="logo">
             <i :class="setLogoClass"></i>
         </div>
         <div class="name"><span>{{fileNodeItem.title}}</span></div>
         <div class="time"><span>{{fileNodeItem.createTime}}</span></div>
         <div class="size"><span>{{fileNodeItem.size}}</span></div>
-        <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu" @fileRenameShow="fileRenameToFileShow"
-                          :rightMenuData="rightMenuData" @rightMenuFade="setRightClickFade" @filePost="filePostToFileShow"
+        <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu"
+                          @fileRenameShow="fileRenameToFileShow"
+                          :rightMenuData="rightMenuData" @rightMenuFade="setRightClickFade"
+                          @filePost="filePostToFileShow"
                           v-if="rightMenuFlag"></right-click-menu>
     </div>
 </template>
@@ -21,6 +23,10 @@
         props: {
             fileNodeItem: {
                 type: Object
+            },
+            fileItemChoose: {
+                type: Boolean,
+                default: false
             }
         },
         components: {
@@ -76,6 +82,9 @@
                     this.logoClass = 'fa fa-file-text-o'
                 }
                 return this.logoClass
+            },
+            getRightClickMenuPath() {
+                return this.$store.state.rightClickMenuPath
             }
         },
         methods: {
@@ -118,12 +127,22 @@
             fileRenameToFileShow(flag, data) {
                 this.$emit('fileRenameShow', flag, data)
             }
+        },
+        watch: {
+            getRightClickMenuPath(val) {
+                if (val === this.fileNodeItem.arrayId) {
+                    this.fileItemChoose = true
+                } else {
+                    this.fileItemChoose = false
+                }
+            }
         }
     }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
     @import '../../assets/font-awesome-4.7.0/css/font-awesome.min.css'
+    @import '../../assets/stylus/public.styl'
     .file-item
         position: relative
         box-sizing: border-box
@@ -137,6 +156,7 @@
             width: 15px
             text-align: center
             vertical-align: middle
+            color: #4c444a
         .name
             display: inline-block
             margin: 0 0 0 10px
@@ -155,7 +175,7 @@
             font-size: 14px
         .size
             display: inline-block
-            width: 100px
+            width: 170px
             text-align: right
             font-size: 14px
 </style>
