@@ -107,11 +107,13 @@
                     this.fileTree.insertNode(temTreeNode)
                     this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
                     store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
+                    store.commit('saveRightClickMenuPath', '') // 用到vuex
                 } else if (this.operateFile === 'newFile-dir') {
                     let temTreeNode = new TreeNode('1', 'dir', this.currentPath, '', data, this.fileTree.treeNodeArray.length)
                     this.fileTree.insertNode(temTreeNode)
                     this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
                     store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
+                    store.commit('saveRightClickMenuPath', '') // 用到vuex
                 } else if (this.operateFile === 'rename') {
                     let arrayId = store.state.rightClickMenuPath
                     this.fileTree.renameNode(arrayId, data)

@@ -35,7 +35,7 @@
                 this.$emit('fileRenameShow', false, this.$refs.inputValue.value)
             },
             cancel() {
-                this.$emit('fileRenameShow', true)
+                this.$emit('fileRenameShow', false)
                 this.$refs.inputValue.value = ''
             },
             clickStop() {

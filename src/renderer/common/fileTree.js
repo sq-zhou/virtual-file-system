@@ -2,6 +2,14 @@
 * 单一一个节点数据
 * */
 export class TreeNode {
+    get path() {
+        return this._path
+    }
+
+    set path(value) {
+        this._path = value
+    }
+
     get size() {
         return this._size
     }
@@ -83,6 +91,7 @@ export class TreeNode {
         this._title = title
         this._arrayId = arrayId
         this._createTime = CurrentTime()
+        this._path = ''
         this._size = (fileKind === 'dir') ? '' : '2KB'
     }
 
@@ -96,6 +105,7 @@ export class TreeNode {
             title: this._title,
             arrayId: this._arrayId,
             createTime: this._createTime,
+            path: this._path,
             size: this._size
         }
     }
@@ -119,7 +129,7 @@ export class FileTree {
     }
 
     _initRootNode() {
-        let rootNode = new TreeNode('1', 'dir', null, '', '', 0)
+        let rootNode = new TreeNode('1', 'dir', null, '', 'system', 0)
         this._treeNodeArray.push(rootNode.getTreeNode())
     }
 
@@ -150,11 +160,22 @@ export class FileTree {
         pareNode.childNodeList.push(node.arrayId)
         node.arrayId = this._treeNodeArray.length
         this._treeNodeArray.push(node.getTreeNode()) // 节点插入
+        this._treeNodeArray[node.arrayId].path = this.getAbsolute(node.arrayId) // 设置路径
     }
 
     copyTreeNode(treeNode) {
         let oneTreeNode = new TreeNode(treeNode.fatNum, treeNode.fileKind, treeNode.parentNode, treeNode.content, treeNode.title, this._treeNodeArray.length)
         return oneTreeNode
+    }
+
+    getAbsolute(arrayId) {
+        let path
+        if (this._treeNodeArray[arrayId].parentNode !== null) {
+            path = this.getAbsolute(this._treeNodeArray[arrayId].parentNode) + ' \\ ' + this._treeNodeArray[arrayId].title
+        } else { // 当时系统盘时
+            return this._treeNodeArray[arrayId].title + ' :'
+        }
+        return path
     }
 
     rename(name, fileKind, array, index, originName) {
@@ -191,6 +212,17 @@ export class FileTree {
         lastPareNode.childNodeList.splice(index, 1)
         node.parentNode = parentArrayId
         this._treeNodeArray[parentArrayId].childNodeList.push(currentArrayId) // 在新的父节点中添加该节点
+        node.path = this.getAbsolute(node.arrayId)// 设置路径
+        let childNodeList = node.childNodeList
+        let cutErgodic = (childNodeList) => { // 重新设计路径方法
+            for (let i of childNodeList) {
+                this._treeNodeArray[i].path = this.getAbsolute(i)
+                if (this._treeNodeArray[i].childNodeList) {
+                    cutErgodic(this._treeNodeArray[i].childNodeList)
+                }
+            }
+        }
+        cutErgodic(childNodeList)
     }
 
     copyNode(parentArrayId, currentArrayId) {

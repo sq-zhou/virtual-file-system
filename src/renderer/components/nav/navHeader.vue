@@ -21,7 +21,7 @@
         name: 'nav-header',
         data() {
             return {
-                currentPath: '',
+                currentPath: 'system',
                 parentPath: ''
             }
         },
@@ -33,10 +33,19 @@
         methods: {
             goBack() {
                 let arrayId = store.state.msgOfCurrentPath
+                let parentNode = store.state.treeNodeArray[arrayId].parentNode
+                let treeNodeArray = store.state.treeNodeArray
                 store.commit('saveRightClickMenuPath', '') // 用到vuex
-                if (store.state.treeNodeArray[arrayId].parentNode !== null && store.state.treeNodeArray[arrayId].parentNode !== undefined) {
+                if (parentNode !== null && parentNode !== undefined) {
+                    this.currentPath = treeNodeArray[parentNode].path
                     store.commit('saveMsgToCurrentPath', store.state.treeNodeArray[arrayId].parentNode)
                 }
+            }
+        },
+        watch: {
+            getCurrentPath(arrayId) {
+                let treeNode = store.state.treeNodeArray[arrayId]
+                this.currentPath = treeNode.path
             }
         }
     }
