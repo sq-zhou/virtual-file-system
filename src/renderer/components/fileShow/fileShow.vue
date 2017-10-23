@@ -8,13 +8,11 @@
             </div>
             <file-item v-for="(item, index) in fileItems" 
                 :fileNodeItem="item" :key="item.name"
-                :index="index"
-                @fileRenameShow="fileRenameChange" @showByFileItemPath="showByCurrentPath"
-                @filePost="filePostToFileTree"></file-item>
+                :index="index" ></file-item>
         </div>
         <right-click-menu :rightMenuData="rightMenuData"
                           v-if="rightMenuFlag" @fileRenameShow="fileRenameChange" @filePost="filePostToFileTree"
-                          @rightMenuFade="setRightClickFade"></right-click-menu>
+                          ></right-click-menu>
         <file-rename v-if="fileRenameFlag"></file-rename>
         <file-frame-text @changeChildrenText="changeChildrenContent"></file-frame-text>
     </div>

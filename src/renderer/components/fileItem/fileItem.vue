@@ -101,8 +101,15 @@
             mouseRightClick(event) {
                 // let path = this.fileNodeItem.appId
                 if (event.button === 2) { // 鼠标右击
-                    this.senMsgToRightMenu(event)
-                    store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
+                    // this.senMsgToRightMenu(event)
+                    // store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
+
+                    store.commit('setRightClickMenuShow', true)
+                    store.commit('setSelectedIndex', this.index)
+                    store.commit('setRightClickMenuPos', {
+                        x: event.pageX,
+                        y: event.pageY
+                    })
                 } else if (event.button === 0) { // 鼠标左击
                     this.checkClick(event)
                 }
@@ -127,8 +134,6 @@
                 } else if (item.type === 0x0) { // is a file
                 //  something
                     store.commit('setSelectedIndex', this.index)
-                } else {
-                    store.commit('setSelectedIndex', -1)
                 }
             },
 
