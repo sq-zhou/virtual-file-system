@@ -1,28 +1,30 @@
 <template>
-    <div class="file-item" :class="{'file-item-background':fileItemChoose}" @mousedown.stop="mouseRightClick($event)">
+    <div class="file-item" :class="{'file-item-background': selectedIndex === index}" @mousedown.stop="mouseRightClick($event)">
         <div class="logo">
-            <i :class="setLogoClass"></i>
+            <i :class="logoClass"></i>
         </div>
-        <div class="name"><span>{{fileNodeItem.title}}</span></div>
-        <div class="time"><span>{{fileNodeItem.createTime}}</span></div>
-        <div class="size"><span>{{fileNodeItem.size}}</span></div>
-        <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu"
-                          @fileRenameShow="fileRenameToFileShow"
-                          :rightMenuData="rightMenuData" @rightMenuFade="setRightClickFade"
-                          @filePost="filePostToFileShow"
-                          v-if="rightMenuFlag"></right-click-menu>
+        <div class="name"><span>{{ fileNodeItem.name }}</span></div>
+        <div class="time"><span>{{ fileNodeItem.created_time }}</span></div>
+        <div class="size"><span>{{ fileNodeItem.size}}</span></div>
+        <!-- <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu" @fileRenameShow="fileRenameToFileShow"
+                          :rightMenuData="rightMenuData" @rightMenuFade="setRightClickFade" @filePost="filePostToFileShow"
+                          v-if="rightMenuFlag"></right-click-menu> -->
     </div>
 </template>
 
 <script>
     import rightClickMenu from '../rightClickMenu/rightClickMenu'
     import store from '../../store/index'
+    const path = require('path')
 
     export default {
         name: 'file-item',
         props: {
             fileNodeItem: {
                 type: Object
+            },
+            index: {
+                type: Number
             }
         },
         components: {
@@ -30,7 +32,6 @@
         },
         data() {
             return {
-                logoClass: 'fa fa-file',
                 clickNumer: 0,
                 fileItemChoose: false,
                 currentEventToRightMenu: null,
@@ -72,14 +73,11 @@
             }
         },
         computed: {
-            /*  在节点渲染完成后执行 */
-            setLogoClass() {
-                if (this.fileNodeItem.fileKind === 'dir') {
-                    this.logoClass = 'fa fa-file'
-                } else {
-                    this.logoClass = 'fa fa-file-text-o'
-                }
-                return this.logoClass
+            selectedIndex() {
+                return this.$store.state.selectedIndex
+            },
+            logoClass() {
+                return this.fileNodeItem.type === 1 ? 'fa fa-file' : 'fa fa-file-text-o'
             },
             getRightClickMenuPath() {
                 return this.$store.state.rightClickMenuPath
@@ -96,8 +94,15 @@
             mouseRightClick(event) {
                 // let path = this.fileNodeItem.appId
                 if (event.button === 2) { // 鼠标右击
-                    this.senMsgToRightMenu(event)
-                    store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
+                    // this.senMsgToRightMenu(event)
+                    // store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
+
+                    store.commit('setRightClickMenuShow', true)
+                    store.commit('setSelectedIndex', this.index)
+                    store.commit('setRightClickMenuPos', {
+                        x: event.pageX,
+                        y: event.pageY
+                    })
                 } else if (event.button === 0) { // 鼠标左击
                     this.checkClick(event)
                 }
@@ -106,30 +111,25 @@
                 this.clickNumer += 1
                 this.fileItemChoose = true
                 store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
-                window.setTimeout(() => {
-                    if (this.clickNumer === 1) {
-                        this.clickNumer = 0
-                    } else if (this.clickNumer) {
-                        this.dbClick(event)
-                        this.clickNumer = 0
-                    }
-                }, 500)
-            },
-            dbClick(event) {
-                if (this.rightMenuFlag === true) {
-                    this.rightMenuFlag = false
-                    return
+
+                if (this.clickNumer === 1) {
+                    this.clickNumer = 0
+                } else if (this.clickNumer) {
+                    this.dbClick(event)
+                    this.clickNumer = 0
                 }
-                if (this.fileNodeItem.fileKind === 'dir') {
-                    this.$emit('showByFileItemPath', this.fileNodeItem.arrayId)
-                } else {
-                    let treeNodeArray = store.state.treeNodeArray
-                    let arrayId = this.fileNodeItem.arrayId
-                    let text = treeNodeArray[arrayId].content
-                    store.commit('saveFileTextObj', {text, arrayId})
-                    store.commit('saveFileTextFlag', true) // 用到vuex
+
+                let item = this.fileNodeItem
+                if (item.type === 0x1) { // is a dir
+                    let currentPath = store.state.path
+                    let showPath = path.posix.join(currentPath, item.name)
+                    store.dispatch('changeDir', showPath)
+                } else if (item.type === 0x0) { // is a file
+                //  something
+                    store.commit('setSelectedIndex', this.index)
                 }
             },
+
             setRightClickFade(flag) {
                 if (flag) {
                     this.rightMenuFlag = false

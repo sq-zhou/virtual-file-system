@@ -8,7 +8,7 @@
         </div>
         <div class="nav-right">
             <div class="nav-path-name">
-                <span class="pathPart">{{currentPath}}</span>
+                <span class="pathPart">{{ path }}</span>
             </div>
         </div>
     </div>
@@ -28,18 +28,14 @@
         computed: {
             getCurrentPath() {
                 return this.$store.state.msgOfCurrentPath
+            },
+            path() {
+                return this.$store.state.path
             }
         },
         methods: {
             goBack() {
-                let arrayId = store.state.msgOfCurrentPath
-                let parentNode = store.state.treeNodeArray[arrayId].parentNode
-                let treeNodeArray = store.state.treeNodeArray
-                store.commit('saveRightClickMenuPath', '') // 用到vuex
-                if (parentNode !== null && parentNode !== undefined) {
-                    this.currentPath = treeNodeArray[parentNode].path
-                    store.commit('saveMsgToCurrentPath', store.state.treeNodeArray[arrayId].parentNode)
-                }
+                store.dispatch('pathGoBackHistory')
             }
         },
         watch: {

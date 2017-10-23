@@ -20,22 +20,42 @@
 </template>
 
 <script>
+    const path = require('path')
+
     export default {
         name: 'fileRename',
-        props: {
-            header: '',
-            operateFileKind: ''
-        },
         data() {
             return {}
         },
         computed: {},
         methods: {
             sureSend() {
-                this.$emit('fileRenameShow', false, this.$refs.inputValue.value)
+                // this.$emit('fileRenameShow', false, this.$refs.inputValue.value)
+                this.$emit('setFileRenameValue', this.$refs.inputValue.value)
+                this.$store.commit('setFileRenameValue', this.$refs.inputValue.value)
+                this.$store.commit('setFileRenameShow', false)
+                let data = this.$refs.inputValue.value
+                let kind = this.$store.state.kind
+
+                if (kind === 'newFile-txt') {
+                    let showPath = this.$store.state.path
+                    let filePath = path.posix.join(showPath, data)
+                    this.$store.dispatch('newFile', {showPath, filePath})
+                } else if (kind === 'newFile-dir') {
+                    let showPath = this.$store.state.path
+                    let dirPath = path.posix.join(showPath, data)
+                    this.$store.dispatch('createDir', {showPath, dirPath})
+                } else if (this.operateFile === 'rename') {
+                    // let arrayId = this.$store.state.rightClickMenuPath
+                    // this.fileTree.renameNode(arrayId, data)
+                    // this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
+                    // store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
+                    // store.commit('saveRightClickMenuPath', '') // 用到vuex
+                }
             },
             cancel() {
-                this.$emit('fileRenameShow', false)
+                // this.$emit('fileRenameShow', false)
+                this.$store.commit('setFileRenameShow', false)
                 this.$refs.inputValue.value = ''
             },
             clickStop() {
