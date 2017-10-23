@@ -1,5 +1,5 @@
 <template>
-    <div class="right-click-menu" :style="{left:menuLeft+'px',top:menuTop+'px'}" v-if="getParentEvent">
+    <div class="right-click-menu" :style="{left:menuLeft, top:menuTop}">
         <div class="menu-item" v-for="item in rightMenuData"
              @mousedown.stop="operateFile(item.kind,$event)">{{item.name}}
         </div>
@@ -12,12 +12,6 @@
     export default {
         name: 'right-click-menu',
         props: {
-            currentPath: { // 当前选择节点的currentPath
-                type: Number
-            },
-            currentEvent: {
-                type: MouseEvent
-            },
             rightMenuData: {
                 type: Array
             }
@@ -25,22 +19,26 @@
         data() {
             return {
                 rightMenuShow: true,
-                menuLeft: '200',
-                menuTop: '20',
                 nodeEvent: {},
                 path: ''
             }
         },
         computed: {
+            menuTop() {
+                return this.$store.state.rightClickMenuPos.y + 'px'
+            },
+            menuLeft() {
+                return this.$store.state.rightClickMenuPos.x + 'px'
+            },
             getParentEvent() {
-                let event = this.currentEvent
+                // let event = this.currentEvent
                 if (this.currentEvent === null) {
                     return false
                 } else {
-                    let positionX = event.clientX
-                    let positionY = event.layerY
-                    this.menuLeft = positionX
-                    this.menuTop = positionY
+                    // let positionX = event.clientX
+                    // let positionY = event.layerY
+                    // this.menuLeft = positionX
+                    // this.menuTop = positionY
                     return true
                 }
             },
@@ -80,7 +78,9 @@
                 }
             },
             newFile(kind) {
-                this.$emit('fileRenameShow', true, kind)
+                store.commit('setRightClickMenuShow', false)
+                store.commit('setFileRenameShow', true)
+                store.commit('setKind', kind)
             },
             openFile() {
                 let treeNodeArray = store.state.treeNodeArray
@@ -144,7 +144,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
     .right-click-menu
-        position: absolute
+        position: fixed
         box-shadow: 1px 1px 1px 1px #0bb0e6
         background: #ffffff
         color: black

@@ -1,14 +1,14 @@
 <template>
-    <div class="file-item" :class="{'file-item-background':fileItemChoose}" @mousedown.stop="mouseRightClick($event)">
+    <div class="file-item" :class="{'file-item-background': selectedIndex === index}" @mousedown.stop="mouseRightClick($event)">
         <div class="logo">
             <i :class="setLogoClass"></i>
         </div>
         <div class="name"><span>{{ fileNodeItem.name }}</span></div>
         <div class="time"><span>{{ fileNodeItem.created_time }}</span></div>
         <div class="size"><span>{{ fileNodeItem.size}}</span></div>
-        <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu" @fileRenameShow="fileRenameToFileShow"
+        <!-- <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu" @fileRenameShow="fileRenameToFileShow"
                           :rightMenuData="rightMenuData" @rightMenuFade="setRightClickFade" @filePost="filePostToFileShow"
-                          v-if="rightMenuFlag"></right-click-menu>
+                          v-if="rightMenuFlag"></right-click-menu> -->
     </div>
 </template>
 
@@ -22,6 +22,9 @@
         props: {
             fileNodeItem: {
                 type: Object
+            },
+            index: {
+                type: Number
             }
         },
         components: {
@@ -71,6 +74,9 @@
             }
         },
         computed: {
+            selectedIndex() {
+                return this.$store.state.selectedIndex
+            },
             /*  在节点渲染完成后执行 */
             setLogoClass() {
                 if (this.fileNodeItem.fileKind === 'dir') {
@@ -120,6 +126,9 @@
                     store.dispatch('changeDir', showPath)
                 } else if (item.type === 0x0) { // is a file
                 //  something
+                    store.commit('setSelectedIndex', this.index)
+                } else {
+                    store.commit('setSelectedIndex', -1)
                 }
             },
 

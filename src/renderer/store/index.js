@@ -32,8 +32,30 @@ const state = {
     // 文件树
     treeNodeArray: {},
 
+    // 正在选择的文件
+    selectedIndex: -1,
+
+    // 右键菜单是否显示
+    rightClickMenuShow: false,
+    // 右键菜单显示位置
+    rightClickMenuPos: {
+        x: 0,
+        y: 0
+    },
+
+    // 文件重命名模块属性
+    fileRename: {
+        show: false,
+        value: ''
+    },
+
+    kind: '',
+
+    // 全局地址
     path: '/',
     fileItems: zfs.listdir('/'),
+
+    // FAT文件分配表
     FATTable: _.chunk(zfs.getFATBuffer(), 8)
 }
 
@@ -54,16 +76,19 @@ const actions = {
         zfs.close(fd)
         commit('setFileItems', zfs.listdir(showPath))
         commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setSelectedIndex', -1)
     },
     createDir({commit}, {showPath, dirPath}) {
         zfs.createdir(dirPath)
         commit('setFileItems', zfs.listdir(showPath))
         commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setSelectedIndex', -1)
     },
     changeDir({commit}, showPath) {
         pathHistory.push(showPath)
         commit('setPath', showPath)
         commit('setFileItems', zfs.listdir(showPath))
+        commit('setSelectedIndex', -1)
     },
     pathGoBackHistory({commit}) {
         if (pathHistory.length >= 2) {
@@ -97,11 +122,29 @@ const actions = {
 }
 // 更新状态
 const mutations = {
+    setSelectedIndex(state, value) {
+        state.selectedIndex = value
+    },
+    setKind(state, value) {
+        state.kind = value
+    },
+    setFileRenameShow(state, value) {
+        state.fileRename.show = value
+    },
+    setFileRenameValue(state, value) {
+        state.fileRename.value = value
+    },
     setFAT(state, fat) {
         state.FATTable = fat
     },
     setPath(state, path) {
         state.path = path
+    },
+    setRightClickMenuShow(state, value) {
+        state.rightClickMenuShow = value
+    },
+    setRightClickMenuPos(state, value) {
+        state.rightClickMenuPos = value
     },
     addFileItem(state, fileItem) {
         state.fileItems.push(fileItem)
