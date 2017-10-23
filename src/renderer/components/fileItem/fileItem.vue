@@ -1,7 +1,7 @@
 <template>
     <div class="file-item" :class="{'file-item-background': selectedIndex === index}" @mousedown.stop="mouseRightClick($event)">
         <div class="logo">
-            <i :class="setLogoClass"></i>
+            <i :class="logoClass"></i>
         </div>
         <div class="name"><span>{{ fileNodeItem.name }}</span></div>
         <div class="time"><span>{{ fileNodeItem.created_time }}</span></div>
@@ -32,7 +32,6 @@
         },
         data() {
             return {
-                logoClass: 'fa fa-file',
                 clickNumer: 0,
                 fileItemChoose: false,
                 currentEventToRightMenu: null,
@@ -77,14 +76,8 @@
             selectedIndex() {
                 return this.$store.state.selectedIndex
             },
-            /*  在节点渲染完成后执行 */
-            setLogoClass() {
-                if (this.fileNodeItem.fileKind === 'dir') {
-                    this.logoClass = 'fa fa-file'
-                } else {
-                    this.logoClass = 'fa fa-file-text-o'
-                }
-                return this.logoClass
+            logoClass() {
+                return this.fileNodeItem.type === 1 ? 'fa fa-file' : 'fa fa-file-text-o'
             },
             getRightClickMenuPath() {
                 return this.$store.state.rightClickMenuPath
