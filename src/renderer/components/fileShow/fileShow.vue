@@ -1,5 +1,5 @@
 <template>
-    <div class="file-show" @mousedown="makeSureMouseDown($event)">
+    <div class="file-show" @mousedown="makeSureMouseDown($event)" ref="fileShow">
         <div class="file-inner">
             <div class="file-intro">
                 <div class="name"><span>名称</span></div>
@@ -24,7 +24,7 @@
     import fileRename from '../fileFrame/fileRename'
     import rightClickMenu from '../rightClickMenu/rightClickMenu'
     import store from '../../store/index'
-
+    import {menuForItem, menuForWrapper} from '../../common/rightMenu'
     export default {
         name: 'file-show',
         data() {
@@ -78,13 +78,18 @@
             makeSureMouseDown(event) {
                 if (event.button === 2) { // 鼠标右击
                     // this.senMsgToRightMenu(event)
-                    store.commit('saveRightClickMenuPath', this.currentPath) // 用到vuex
+                    // store.commit('saveRightClickMenuPath', this.currentPath) // 用到vuex
 
-                    store.commit('setRightClickMenuShow', true)
-                    store.commit('setRightClickMenuPos', {
-                        x: event.pageX,
-                        y: event.pageY
-                    })
+                    // store.commit('setRightClickMenuShow', true)
+                    // store.commit('setRightClickMenuPos', {
+                    //     x: event.pageX,
+                    //     y: event.pageY
+                    // })
+                    if (event.target.className === 'file-inner') {
+                        menuForWrapper.popup()
+                    } else {
+                        menuForItem.popup()
+                    }
                 } else if (event.button === 0) { // 鼠标左击
                     store.commit('saveRightClickMenuPath', '') // 用到vuex
                     if (store.state.rightClickMenuShow) {

@@ -1,14 +1,11 @@
 <template>
-    <div class="file-item" :class="{'file-item-background': selectedIndex === index}" @mousedown.stop="mouseRightClick($event)">
+    <div class="file-item" :class="{'file-item-background': selectedIndex === index}" @click="mouseRightClick($event)">
         <div class="logo">
             <i :class="logoClass"></i>
         </div>
         <div class="name"><span>{{ fileNodeItem.name }}</span></div>
         <div class="time"><span>{{ fileNodeItem.created_time }}</span></div>
         <div class="size"><span>{{ fileNodeItem.size}}</span></div>
-        <!-- <right-click-menu :currentPath="fileNodeItem.arrayId" :currentEvent="currentEventToRightMenu" @fileRenameShow="fileRenameToFileShow"
-                          :rightMenuData="rightMenuData" @rightMenuFade="setRightClickFade" @filePost="filePostToFileShow"
-                          v-if="rightMenuFlag"></right-click-menu> -->
     </div>
 </template>
 
@@ -92,20 +89,7 @@
             },
             /*  文件点击事件:鼠标右击，鼠标左击 */
             mouseRightClick(event) {
-                // let path = this.fileNodeItem.appId
-                if (event.button === 2) { // 鼠标右击
-                    // this.senMsgToRightMenu(event)
-                    // store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
-
-                    store.commit('setRightClickMenuShow', true)
-                    store.commit('setSelectedIndex', this.index)
-                    store.commit('setRightClickMenuPos', {
-                        x: event.pageX,
-                        y: event.pageY
-                    })
-                } else if (event.button === 0) { // 鼠标左击
-                    this.checkClick(event)
-                }
+                this.checkClick(event)
             },
             checkClick(event) {
                 this.clickNumer += 1

@@ -1,7 +1,7 @@
 <template>
     <div class="add-file-frame" v-if="modelFade">
         <div class="file-model">
-            <div class="title" @mousedown="" @mouseup="">
+            <div class="title">
                 <span>文件名字</span>
                 <span class="close fa fa-window-close" @click="modelClose()"></span>
             </div>
@@ -20,7 +20,6 @@
 
 <script>
     import store from '../../store/index'
-
     export default {
         name: 'add-file-frame',
         data() {
@@ -114,4 +113,3 @@
                 width: 10px
                 background-color: #cdc2cb
 </style>
-

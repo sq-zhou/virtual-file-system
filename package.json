@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "author": "sq-zhou <zhousq109@163.com>",
   "description": "An electron-vue project",
-  "license": null,
+  "license": "ISC",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",

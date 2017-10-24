@@ -8,7 +8,6 @@
 
 <script>
     import store from '../../store/index'
-
     export default {
         name: 'right-click-menu',
         props: {
@@ -160,4 +159,3 @@
             background: #0bb0e6
             color: #ffffff
 </style>
-
