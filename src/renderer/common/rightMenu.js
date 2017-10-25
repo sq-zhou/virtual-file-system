@@ -19,7 +19,7 @@ export const menuForWrapper = new Menu()
 menuForWrapper.append(new MenuItem({
     label: '新建文件',
     click() {
-    console.log('fileShow')
+        console.log('fileShow')
     }
  }))
 menuForWrapper.append(new MenuItem({label: '新建文件夹'}))
