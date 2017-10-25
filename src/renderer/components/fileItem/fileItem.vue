@@ -90,7 +90,6 @@
             checkClick(event) {
                 this.clickNumer += 1
                 this.fileItemChoose = true
-                store.commit('saveRightClickMenuPath', this.fileNodeItem.arrayId) // 用到vuex
 
                 if (this.clickNumer === 1) {
                     this.clickNumer = 0
@@ -100,13 +99,14 @@
                 }
 
                 let item = this.fileNodeItem
+                let currentPath = store.state.path
+                let showPath = path.posix.join(currentPath, item.name)
                 if (item.type === 0x1) { // is a dir
-                    let currentPath = store.state.path
-                    let showPath = path.posix.join(currentPath, item.name)
                     store.dispatch('changeDir', showPath)
                 } else if (item.type === 0x0) { // is a file
-                //  something
+                    // something
                     store.commit('setSelectedIndex', this.index)
+                    store.dispatch('openFile', showPath)
                 }
             }
         }

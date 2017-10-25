@@ -37,11 +37,11 @@
                 let data = this.$refs.inputValue.value
                 let kind = this.$store.state.kind
 
-                if (kind === 'newFile-txt') {
+                if (kind === 'newFile') {
                     let showPath = this.$store.state.path
                     let filePath = path.posix.join(showPath, data)
                     this.$store.dispatch('newFile', {showPath, filePath})
-                } else if (kind === 'newFile-dir') {
+                } else if (kind === 'newDir') {
                     let showPath = this.$store.state.path
                     let dirPath = path.posix.join(showPath, data)
                     this.$store.dispatch('createDir', {showPath, dirPath})

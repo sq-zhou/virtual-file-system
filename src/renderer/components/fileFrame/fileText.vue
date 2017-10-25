@@ -1,17 +1,19 @@
 <template>
-    <div class="add-file-frame" v-if="modelFade">
+    <div class="add-file-frame">
         <div class="file-model">
             <div class="title">
-                <span>文件名字</span>
+                <span>{{ title }}</span>
                 <span class="close fa fa-window-close" @click="modelClose()"></span>
             </div>
             <div class="operation">
-                <i class="fa fa-files-o"></i>
+                <!-- <i class="fa fa-files-o"></i> -->
                 <i class="fa fa-save" @click="saveText" title="保存"></i>
             </div>
             <div class="content">
-                <div class="content-text" contenteditable="true" ref="contentText">{{content}}
-                </div>
+                <textarea class="content-text" 
+                contenteditable="true" 
+                ref="contentText" v-model="contentBuffer">
+                </textarea>
             </div>
         </div>
         <div class="file-fade"></div>
@@ -19,35 +21,37 @@
 </template>
 
 <script>
-    import store from '../../store/index'
+    import * as path from 'path'
+
     export default {
         name: 'add-file-frame',
+        props: ['fileItem', 'index'],
         data() {
             return {
-                modelFade: false,
-                path: '',
-                content: ''
+                contentBuffer: ''
             }
         },
         computed: {
             getFileTextFlag() {
                 return this.$store.state.fileTextFlag
+            },
+            title() {
+                return path.posix.basename(this.fileItem.path)
             }
+        },
+        created() {
+            this.contentBuffer = this.fileItem.content
         },
         methods: {
             modelClose() {
-                this.modelFade = false
-                store.commit('saveFileTextFlag', false) // 用到vue
+                this.$store.commit('removeFileEditorById', this.index)
             },
             saveText() {
-                let innerHTML = this.$refs.contentText.innerHTML
-                this.$emit('changeChildrenText', innerHTML)
-            }
-        },
-        watch: {
-            getFileTextFlag(flag) {
-                this.modelFade = flag
-                this.content = store.state.fileTextObj.text
+                this.$store.commit('setFileEditorContentById', this.index, this.contentBuffer)
+                this.$store.dispatch('saveFileEditorToFile', {
+                    path: this.fileItem.path,
+                    content: this.contentBuffer
+                })
             }
         }
     }

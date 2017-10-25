@@ -9,7 +9,11 @@
                           v-if="rightMenuFlag" @fileRenameShow="fileRenameChange" @filePost="filePostToFileTree"
                           ></right-click-menu>
         <file-rename v-if="fileRenameFlag"></file-rename>
-        <file-frame-text @changeChildrenText="changeChildrenContent"></file-frame-text>
+        <file-frame-text v-for="(item, index) in fileEditors" :key="item.id"
+            v-bind:fileItem="item"
+            v-bind:index="index"
+            @changeChildrenText="changeChildrenContent">
+            </file-frame-text>
     </div>
 </template>
 
@@ -57,6 +61,9 @@
             },
             fileRenameFlag() {
                 return this.$store.state.fileRename.show
+            },
+            fileEditors() {
+                return this.$store.state.fileEditors
             }
         },
         components: {
@@ -86,7 +93,6 @@
                         menuForItem.popup()
                     }
                 } else if (event.button === 0) { // 鼠标左击
-                    store.commit('saveRightClickMenuPath', '') // 用到vuex
                     if (store.state.rightClickMenuShow) {
                         store.commit('setRightClickMenuShow', false)
                     }
@@ -111,27 +117,6 @@
                 let arrayId = store.state.fileTextObj.arrayId
                 this.fileTree.getPointNode(arrayId).content = text
                 store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
-            },
-            filePostToFileTree() {
-                let fileOperate = store.state.fileOperate
-                if (fileOperate.operateKind === 'copy') {
-                    this.fileTree.copyNode(this.currentPath, fileOperate.path)
-                } else if (fileOperate.operateKind === 'cut') {
-                    this.fileTree.cutNode(this.currentPath, fileOperate.path)
-                } else if (fileOperate.operateKind === 'delete') {
-                    this.fileTree.deleteNode(fileOperate.path)
-                } else if (fileOperate.operateKind === 'rename') {
-                    console.log('rename')
-                    this.fileTree.renameNode()
-                }
-                this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
-                store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
-            }
-        },
-        watch: {
-            getCurrentPath(arrayId) {
-                this.currentPath = arrayId
-                this.itemTotal = this.fileTree.getChildrenNodeList(arrayId)
             }
         }
     }

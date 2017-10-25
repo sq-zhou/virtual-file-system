@@ -17,20 +17,6 @@ zfs.connect('test.disk')
 Vue.use(Vuex)
 // 首先声明一个状态 state
 const state = {
-    // 设置fileText内容
-    fileTextObj: {},
-    // 设置fileText是否显示
-    fileTextFlag: {},
-    // 操作文件 例如复制，剪切，删除,内含有参数path(String),operateKind(String)
-    fileOperate: {},
-    // 操作文件的Flag 用于通知主组件fileshow 粘贴文件
-    fileOperateFlag: {},
-    // 用于右击菜单的多个显示的排除,相当与flag，赋值参数为当前fileitem的currentPath
-    rightClickMenuPath: {},
-    // 文件的选择当前路径,为文件树现行的arrayId
-    msgOfCurrentPath: {},
-    // 文件树
-    treeNodeArray: {},
 
     // 正在选择的文件
     selectedIndex: -1,
@@ -56,10 +42,16 @@ const state = {
     fileItems: zfs.listdir('/'),
 
     // FAT文件分配表
-    FATTable: _.chunk(zfs.getFATBuffer(), 8)
-}
+    FATTable: _.chunk(zfs.getFATBuffer(), 8),
 
-console.log(zfs.getFATBuffer())
+    // FileEditors
+    fileEditors: [
+        // {
+        //     path: '/abc.txt',
+        //     content: ''
+        // }
+    ]
+}
 
 let pathHistory = [
     '/'
@@ -67,6 +59,21 @@ let pathHistory = [
 
 // 然后给 actions 注册一个事件处理函数，当这个函数被触发时，将状态提交到 mutaions中处理
 const actions = {
+    openFile({commit}, path) {
+        let fd = zfs.open(path, zfs.ZFILE_FLAG_READ)
+        let content = zfs.readAll(fd)
+        content = content === null ? '' : content.toString()
+        zfs.close(fd)
+        commit('addFileEditor', {
+            path,
+            content
+        })
+    },
+    saveFileEditorToFile({commit}, {path, content}) {
+        let fd = zfs.open(path, zfs.ZFILE_FLAG_WRITE)
+        zfs.writeAll(fd, Buffer.from(content))
+        zfs.close(fd)
+    },
     loadFAT({commit}) {
         let buffer = zfs.getFATBuffer()
         commit('setFAT', _.chunk(buffer, 8))
@@ -74,6 +81,12 @@ const actions = {
     newFile({commit}, {showPath, filePath}) {
         let fd = zfs.open(filePath, zfs.ZFILE_FLAG_WRITE)
         zfs.close(fd)
+        commit('setFileItems', zfs.listdir(showPath))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setSelectedIndex', -1)
+    },
+    removeFile({commit}, {showPath, filePath}) {
+        zfs.remove(filePath)
         commit('setFileItems', zfs.listdir(showPath))
         commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
         commit('setSelectedIndex', -1)
@@ -97,31 +110,19 @@ const actions = {
             commit('setPath', path)
             commit('setFileItems', zfs.listdir(path))
         }
-    },
-    saveDataFileTextObj({commit}, msg) {
-        commit('saveFileTextObj', msg)
-    },
-    saveDataFileTextFlag({commit}, msg) {
-        commit('saveFileTextFlag', msg)
-    },
-    saveDataFileOperate({commit}, msg) {
-        commit('saveFileOperate', msg)
-    },
-    saveDataFileOperateFlag({commit}, msg) {
-        commit('saveFileOperateFlag', msg)
-    },
-    saveDataRightClickMenuPath({commit}, msg) {
-        commit('saveMsgToFileFrame', msg)
-    },
-    saveDataToCurrentPath({commit}, msg) {
-        commit('saveRightClickMenuPath', msg)
-    },
-    saveDataTreeNodeArray({commit}, msg) {
-        commit('saveTreeNodeArray', msg)
     }
 }
 // 更新状态
 const mutations = {
+    setFileEditorContentById(state, id, content) {
+        state.fileEditors[id].content = content
+    },
+    addFileEditor(state, fe) {
+        state.fileEditors.push(fe)
+    },
+    removeFileEditorById(state, id) {
+        state.fileEditors.splice(id, 1)
+    },
     setSelectedIndex(state, value) {
         state.selectedIndex = value
     },
@@ -151,27 +152,6 @@ const mutations = {
     },
     setFileItems(state, fileItems) {
         state.fileItems = fileItems
-    },
-    saveFileTextObj(state, msg) {
-        state.fileTextObj = msg
-    },
-    saveFileTextFlag(state, msg) {
-        state.fileTextFlag = msg
-    },
-    saveFileOperate(state, msg) {
-        state.fileOperate = msg
-    },
-    saveFileOperateFlag(state, msg) {
-        state.fileOperateFlag = msg
-    },
-    saveRightClickMenuPath(state, msg) {
-        state.rightClickMenuPath = msg
-    },
-    saveMsgToCurrentPath(state, msg) {
-        state.msgOfCurrentPath = msg
-    },
-    saveTreeNodeArray(state, msg) {
-        state.treeNodeArray = msg
     }
 }
 // 获取状态信息
