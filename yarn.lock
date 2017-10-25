@@ -7029,6 +7029,6 @@ yauzl@2.4.1:
   dependencies:
     fd-slicer "~1.0.1"
 
-zfs-js@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/zfs-js/-/zfs-js-1.1.0.tgz#531ba9858978167d7ebf4ec7664266b5720a31c2"
+zfs-js@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/zfs-js/-/zfs-js-2.0.0.tgz#003f34b66b0a7fb1356f5c9079edadba879d6b2c"

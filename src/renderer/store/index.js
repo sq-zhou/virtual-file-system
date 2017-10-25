@@ -59,8 +59,6 @@ const state = {
     FATTable: _.chunk(zfs.getFATBuffer(), 8)
 }
 
-console.log(zfs.getFATBuffer())
-
 let pathHistory = [
     '/'
 ]
