@@ -46,10 +46,10 @@ const state = {
 
     // FileEditors
     fileEditors: [
-        {
-            path: '/abc.txt',
-            content: ''
-        }
+        // {
+        //     path: '/abc.txt',
+        //     content: ''
+        // }
     ]
 }
 
