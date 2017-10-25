@@ -76,6 +76,12 @@ const actions = {
         commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
         commit('setSelectedIndex', -1)
     },
+    removeFile({commit}, {showPath, filePath}) {
+        zfs.remove(filePath)
+        commit('setFileItems', zfs.listdir(showPath))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setSelectedIndex', -1)
+    },
     createDir({commit}, {showPath, dirPath}) {
         zfs.createdir(dirPath)
         commit('setFileItems', zfs.listdir(showPath))
