@@ -53,7 +53,7 @@
         align-items: center
         width: 100%
         height: 30px
-        background: #e7dde5
+        background: #dddddd
         .nav-left
             flex: 0 0 90px
             height: 30px
