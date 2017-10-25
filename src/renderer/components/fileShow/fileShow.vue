@@ -1,11 +1,6 @@
 <template>
     <div class="file-show" @mousedown="makeSureMouseDown($event)" ref="fileShow">
         <div class="file-inner">
-            <div class="file-intro">
-                <div class="name"><span>名称</span></div>
-                <div class="time"><span>修改时间</span></div>
-                <div class="size"><span>大小</span></div>
-            </div>
             <file-item v-for="(item, index) in fileItems" 
                 :fileNodeItem="item" :key="item.name"
                 :index="index" ></file-item>
@@ -153,7 +148,6 @@
         overflow: auto
         .file-inner
             width: 100%
-            min-width: 700px;
             height: 100%
             display: flex
             flex-flow: row wrap

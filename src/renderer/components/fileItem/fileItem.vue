@@ -4,8 +4,6 @@
             <i :class="logoClass"></i>
         </div>
         <div class="name"><span>{{ fileNodeItem.name }}</span></div>
-        <div class="time"><span>{{ fileNodeItem.created_time }}</span></div>
-        <div class="size"><span>{{ fileNodeItem.size}}</span></div>
     </div>
 </template>
 
@@ -81,8 +79,6 @@
             }
         },
         methods: {
-            addNewFile() {
-            },
             senMsgToRightMenu(event) {
                 this.rightMenuFlag = true
                 this.currentEventToRightMenu = event
@@ -112,27 +108,6 @@
                 //  something
                     store.commit('setSelectedIndex', this.index)
                 }
-            },
-
-            setRightClickFade(flag) {
-                if (flag) {
-                    this.rightMenuFlag = false
-                }
-            },
-            filePostToFileShow() { // 中转站，发送子组件的filePost操作给父组件
-                this.$emit('filePost')
-            },
-            fileRenameToFileShow(flag, data) {
-                this.$emit('fileRenameShow', flag, data)
-            }
-        },
-        watch: {
-            getRightClickMenuPath(val) {
-                if (val === this.fileNodeItem.arrayId) {
-                    this.fileItemChoose = true
-                } else {
-                    this.fileItemChoose = false
-                }
             }
         }
     }
@@ -143,22 +118,20 @@
     @import '../../assets/stylus/public.styl'
     .file-item
         position: relative
-        box-sizing: border-box
-        width: 100%
-        height: 30px
+        margin: 10px 5px
+        width: 70px
+        height: 70px
+        text-align:center
         line-height: 30px
         cursor: default
         .logo
-            display: inline-block
-            margin-left: 15px
-            width: 15px
+            padding: 5px 0 0 0;
             text-align: center
             vertical-align: middle
             color: #4c444a
+            i 
+                font-size: 33px
         .name
-            display: inline-block
-            margin: 0 0 0 10px
-            width: 300px
             overflow: hidden
             font-size: 14px
             white-space: nowrap
