@@ -13,8 +13,8 @@
 <script>
     import rightClickMenu from '../rightClickMenu/rightClickMenu'
     import store from '../../store/index'
+    import {menuForfile, menuForDir} from '../../common/rightMenu'
     const path = require('path')
-
     export default {
         name: 'file-item',
         props: {
@@ -85,6 +85,12 @@
             handleMouseDown(evt) {
                 if (event.button === 2) { // 鼠标右击
                     store.commit('setSelectedIndex', this.index)
+                    let item = this.fileNodeItem
+                    if (item.type === 0x1) { // is a dir
+                        menuForfile.popup()
+                    } else if (item.type === 0x0) { // is a file
+                        menuForDir.popup()
+                    }
                 } else if (event.button === 0) { // 鼠标左击
                     store.commit('setSelectedIndex', this.index)
                 }

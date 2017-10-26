@@ -2,15 +2,15 @@ import store from '../store/index'
 export const {remote} = require('electron')
 const path = require('path')
 const {Menu, MenuItem} = remote
-
-export const menuForItem = new Menu()
-menuForItem.append(new MenuItem({
+// 文件的右击显示
+export const menuForfile = new Menu()
+menuForfile.append(new MenuItem({
     label: '打开',
     click() {
         console.log('fileItem')
     }
 }))
-menuForItem.append(new MenuItem({
+menuForfile.append(new MenuItem({
     label: '剪切',
     click() {
         let selectedIndex = store.state.selectedIndex
@@ -22,7 +22,7 @@ menuForItem.append(new MenuItem({
         }
     }
 }))
-menuForItem.append(new MenuItem({
+menuForfile.append(new MenuItem({
     label: '复制',
     click() {
         let selectedIndex = store.state.selectedIndex
@@ -34,8 +34,8 @@ menuForItem.append(new MenuItem({
         }
     }
 }))
-menuForItem.append(new MenuItem({label: '重命名'}))
-menuForItem.append(new MenuItem({
+menuForfile.append(new MenuItem({label: '重命名'}))
+menuForfile.append(new MenuItem({
     label: '删除',
     click() {
         let selectedIndex = store.state.selectedIndex
@@ -49,7 +49,32 @@ menuForItem.append(new MenuItem({
         }
     }
 }))
-
+menuForfile.append(new MenuItem({
+    label: '属性'
+}))
+// 文件夹的右击显示
+export const menuForDir = new Menu()
+menuForDir.append(new MenuItem({
+    label: '打开',
+    click() {
+        console.log('fileItem')
+    }
+}))
+menuForDir.append(new MenuItem({
+    label: '删除',
+    click() {
+        let selectedIndex = store.state.selectedIndex
+        if (selectedIndex > -1) {
+            let item = store.state.fileItems[selectedIndex]
+            let removePath = path.posix.join(store.state.path, item.name)
+            store.dispatch('removeFile', {
+                showPath: store.state.path,
+                filePath: removePath
+            })
+        }
+    }
+}))
+// 空白的右击显示
 export const menuForWrapper = new Menu()
 menuForWrapper.append(new MenuItem({
     label: '新建文件',

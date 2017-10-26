@@ -14,6 +14,7 @@
             v-bind:index="index"
             @changeChildrenText="changeChildrenContent">
             </file-frame-text>
+        <file-property v-if="filePropertyFlag"></file-property>
     </div>
 </template>
 
@@ -22,8 +23,9 @@
     import fileFrameText from '../fileFrame/fileText'
     import fileRename from '../fileFrame/fileRename'
     import rightClickMenu from '../rightClickMenu/rightClickMenu'
+    import fileProperty from '../fileFrame/fileProperty'
     import store from '../../store/index'
-    import {menuForItem, menuForWrapper} from '../../common/rightMenu'
+    import {menuForWrapper} from '../../common/rightMenu'
     export default {
         name: 'file-show',
         data() {
@@ -46,7 +48,8 @@
                         kind: 'post',
                         name: '粘贴'
                     }
-                ]
+                ],
+                filePropertyFlag: false
             }
         },
         computed: {
@@ -70,7 +73,8 @@
             fileItem: fileItem,
             fileFrameText: fileFrameText,
             fileRename: fileRename,
-            rightClickMenu: rightClickMenu
+            rightClickMenu: rightClickMenu,
+            fileProperty: fileProperty
         },
         methods: {
             senMsgToRightMenu(event) {
@@ -89,8 +93,6 @@
                     // })
                     if (event.target.className === 'file-inner') {
                         menuForWrapper.popup()
-                    } else {
-                        menuForItem.popup()
                     }
                 } else if (event.button === 0) { // 鼠标左击
                     if (store.state.rightClickMenuShow) {
