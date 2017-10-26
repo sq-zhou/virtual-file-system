@@ -46,7 +46,7 @@
         top: 30px
         bottom: 0
         width: 310px
-        background: #e7dde5
+        background: #dddddd
         overflow: auto
         .disk-cont
             margin: 0 auto
@@ -57,15 +57,16 @@
                 font-size: 15px
             .disk-wrapper
                 position: relative
-                height: 260px
+                height: 245px
                 overflow: hidden
-                border: 1px solid #ada3ab
+                box-shadow: 0 0 1px 1px #0bb0e6
+                background: #c6c6c6
                 .disk-inner
                     position: absolute
                     left: 0
                     top: 10px;
                     right: 0
-                    height: 250px
+                    height: 235px
                     overflow: auto
                     div
                         text-align: center
@@ -73,10 +74,10 @@
                         .disk-piece
                             display: inline-block
                             vertical-align: top
-                            margin: 3px
-                            width: 24px
-                            height: 22px
-                            line-height: 22px
+                            margin: 3px 5px
+                            width: 20px
+                            height: 20px
+                            line-height: 20px
                             text-align: center
                             font-size: 12px
                             background: #ffffff

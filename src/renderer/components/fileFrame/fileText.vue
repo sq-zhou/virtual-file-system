@@ -6,7 +6,6 @@
                 <span class="close fa fa-window-close" @click="modelClose()"></span>
             </div>
             <div class="operation">
-                <!-- <i class="fa fa-files-o"></i> -->
                 <i class="fa fa-save" @click="saveText" title="保存"></i>
             </div>
             <div class="content">
@@ -99,7 +98,9 @@
             height: 230px
             overflow: hidden
             .content-text
+                display: block
                 position: absolute
+                width: 99%
                 left: 0
                 right: 0
                 top: 0
