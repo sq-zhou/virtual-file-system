@@ -118,6 +118,10 @@ const actions = {
     pasteFile({commit}, {srcPath, distPath, showPath, isCut}) {
         if (srcPath === null || distPath === null) return
 
+        if (zfs.stat(distPath) !== null) {
+            distPath += ' -副本'
+        }
+
         let fd = zfs.open(srcPath, zfs.ZFILE_FLAG_READ)
         let content = zfs.readAll(fd)
         content = content === null ? '' : content.toString()
