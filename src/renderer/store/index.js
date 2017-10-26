@@ -50,7 +50,10 @@ const state = {
         //     path: '/abc.txt',
         //     content: ''
         // }
-    ]
+    ],
+
+    copyPath: null,
+    isCut: false
 }
 
 let pathHistory = [
@@ -73,6 +76,7 @@ const actions = {
         let fd = zfs.open(path, zfs.ZFILE_FLAG_WRITE)
         zfs.writeAll(fd, Buffer.from(content))
         zfs.close(fd)
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
     },
     loadFAT({commit}) {
         let buffer = zfs.getFATBuffer()
@@ -110,10 +114,39 @@ const actions = {
             commit('setPath', path)
             commit('setFileItems', zfs.listdir(path))
         }
+    },
+    pasteFile({commit}, {srcPath, distPath, showPath, isCut}) {
+        if (srcPath === null || distPath === null) return
+
+        let fd = zfs.open(srcPath, zfs.ZFILE_FLAG_READ)
+        let content = zfs.readAll(fd)
+        content = content === null ? '' : content.toString()
+        zfs.close(fd)
+
+        fd = zfs.open(distPath, zfs.ZFILE_FLAG_WRITE)
+        if (content.length > 0) {
+            zfs.writeAll(fd, Buffer.from(content))
+        }
+        zfs.close(fd)
+
+        if (isCut) {
+            zfs.remove(srcPath)
+            commit('setCopyPath', null)
+        }
+
+        commit('setFileItems', zfs.listdir(showPath))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setSelectedIndex', -1)
     }
 }
 // 更新状态
 const mutations = {
+    setCopyPath(state, path) {
+        state.copyPath = path
+    },
+    setIsCut(state, value) {
+        state.isCut = value
+    },
     setFileEditorContentById(state, id, content) {
         state.fileEditors[id].content = content
     },
