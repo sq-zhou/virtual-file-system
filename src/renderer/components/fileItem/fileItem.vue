@@ -1,5 +1,8 @@
 <template>
-    <div class="file-item" :class="{'file-item-background': selectedIndex === index}" @click="mouseRightClick($event)">
+    <div class="file-item" 
+        :class="{'file-item-background': selectedIndex === index}" 
+            @mousedown="handleMouseDown($event)"
+            @click="mouseRightClick($event)">
         <div class="logo">
             <i :class="logoClass"></i>
         </div>
@@ -79,6 +82,13 @@
             }
         },
         methods: {
+            handleMouseDown(evt) {
+                if (event.button === 2) { // 鼠标右击
+                    store.commit('setSelectedIndex', this.index)
+                } else if (event.button === 0) { // 鼠标左击
+                    store.commit('setSelectedIndex', this.index)
+                }
+            },
             senMsgToRightMenu(event) {
                 this.rightMenuFlag = true
                 this.currentEventToRightMenu = event

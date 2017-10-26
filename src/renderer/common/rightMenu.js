@@ -10,9 +10,30 @@ menuForItem.append(new MenuItem({
         console.log('fileItem')
     }
 }))
-menuForItem.append(new MenuItem({label: '剪切'}))
-menuForItem.append(new MenuItem({label: '复制'}))
-menuForItem.append(new MenuItem({label: '粘贴'}))
+menuForItem.append(new MenuItem({
+    label: '剪切',
+    click() {
+        let selectedIndex = store.state.selectedIndex
+        if (selectedIndex > -1) {
+            const item = store.state.fileItems[selectedIndex]
+            const _path = path.posix.join(store.state.path, item.name)
+            store.commit('setCopyPath', _path)
+            store.commit('setIsCut', true)
+        }
+    }
+}))
+menuForItem.append(new MenuItem({
+    label: '复制',
+    click() {
+        let selectedIndex = store.state.selectedIndex
+        if (selectedIndex > -1) {
+            const item = store.state.fileItems[selectedIndex]
+            const _path = path.posix.join(store.state.path, item.name)
+            store.commit('setCopyPath', _path)
+            store.commit('setIsCut', false)
+        }
+    }
+}))
 menuForItem.append(new MenuItem({label: '重命名'}))
 menuForItem.append(new MenuItem({
     label: '删除',
@@ -21,7 +42,6 @@ menuForItem.append(new MenuItem({
         if (selectedIndex > -1) {
             let item = store.state.fileItems[selectedIndex]
             let removePath = path.posix.join(store.state.path, item.name)
-            console.log(removePath)
             store.dispatch('removeFile', {
                 showPath: store.state.path,
                 filePath: removePath
@@ -45,4 +65,15 @@ menuForWrapper.append(new MenuItem({
         store.commit('setFileRenameShow', true)
     }
 }))
-menuForWrapper.append(new MenuItem({label: '粘贴'}))
+menuForWrapper.append(new MenuItem({
+    label: '粘贴',
+    click() {
+        let filename = path.posix.basename(store.state.copyPath)
+        store.dispatch('pasteFile', {
+            srcPath: store.state.copyPath,
+            distPath: path.posix.join(store.state.path, filename),
+            showPath: store.state.path,
+            isCut: store.state.isCut
+        })
+    }
+}))
