@@ -87,9 +87,9 @@
                     store.commit('setSelectedIndex', this.index)
                     let item = this.fileNodeItem
                     if (item.type === 0x1) { // is a dir
-                        menuForfile.popup()
-                    } else if (item.type === 0x0) { // is a file
                         menuForDir.popup()
+                    } else if (item.type === 0x0) { // is a file
+                        menuForfile.popup()
                     }
                 } else if (event.button === 0) { // 鼠标左击
                     store.commit('setSelectedIndex', this.index)
