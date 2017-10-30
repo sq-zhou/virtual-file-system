@@ -5,14 +5,10 @@
                 :fileNodeItem="item" :key="item.name"
                 :index="index" ></file-item>
         </div>
-        <right-click-menu :rightMenuData="rightMenuData"
-                          v-if="rightMenuFlag" @fileRenameShow="fileRenameChange" @filePost="filePostToFileTree"
-                          ></right-click-menu>
         <file-rename v-if="fileRenameFlag"></file-rename>
         <file-frame-text v-for="(item, index) in fileEditors" :key="item.id"
             v-bind:fileItem="item"
-            v-bind:index="index"
-            @changeChildrenText="changeChildrenContent">
+            v-bind:index="index">
             </file-frame-text>
         <file-property v-if="filePropertyFlag"></file-property>
     </div>
@@ -22,10 +18,10 @@
     import fileItem from '../fileItem/fileItem'
     import fileFrameText from '../fileFrame/fileText'
     import fileRename from '../fileFrame/fileRename'
-    import rightClickMenu from '../rightClickMenu/rightClickMenu'
     import fileProperty from '../fileFrame/fileProperty'
+    import {copyFile, cutFile, pasteFile, deleteFile, newFile, newDir} from '../../common/operateFile'
     import store from '../../store/index'
-    import {menuForWrapper} from '../../common/rightMenu'
+    const ipc = require('electron').ipcRenderer
     export default {
         name: 'file-show',
         data() {
@@ -35,20 +31,6 @@
                 operateFile: '',
                 currentPath: '',
                 currentEvent: null,
-                rightMenuData: [
-                    {
-                        kind: 'newFile-txt',
-                        name: '新建文本'
-                    },
-                    {
-                        kind: 'newFile-dir',
-                        name: '新建文件夹'
-                    },
-                    {
-                        kind: 'post',
-                        name: '粘贴'
-                    }
-                ],
                 filePropertyFlag: false
             }
         },
@@ -73,7 +55,6 @@
             fileItem: fileItem,
             fileFrameText: fileFrameText,
             fileRename: fileRename,
-            rightClickMenu: rightClickMenu,
             fileProperty: fileProperty
         },
         methods: {
@@ -92,34 +73,34 @@
                     //     y: event.pageY
                     // })
                     if (event.target.className === 'file-inner') {
-                        menuForWrapper.popup()
+                        ipc.send('menuForWrapper')
                     }
                 } else if (event.button === 0) { // 鼠标左击
                     if (store.state.rightClickMenuShow) {
                         store.commit('setRightClickMenuShow', false)
                     }
                 }
-            },
-            fileRenameChange(flag, data) {
-                if (flag) {
-                    store.commit('setRightClickMenuShow', false)
-                    store.commit('setFileRenameShow', true)
-                    if (data) {
-                        this.operateFile = data // 发送操作的数据 newFile-txt newFile-dir rename
-                    }
-                } else {
-                    if (data) { // 注意这是没有按了确认键的操作
-                        this.operateFileMethod(data)
-                    }
-                    store.commit('setRightClickMenuShow', false)
-                    store.commit('setFileRenameShow', false)
-                }
-            },
-            changeChildrenContent(text) {
-                let arrayId = store.state.fileTextObj.arrayId
-                this.fileTree.getPointNode(arrayId).content = text
-                store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
             }
+        },
+        created() {
+            ipc.on('cutFile', function() {
+               cutFile()
+            })
+            ipc.on('copyFile', function() {
+               copyFile()
+            })
+            ipc.on('deleteFile', function() {
+               deleteFile()
+            })
+            ipc.on('pasteFile', function() {
+               pasteFile()
+            })
+            ipc.on('newFile', function() {
+               newFile()
+            })
+            ipc.on('newDir', function() {
+               newDir()
+            })
         }
     }
 </script>

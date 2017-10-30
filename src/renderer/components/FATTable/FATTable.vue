@@ -3,15 +3,6 @@
         <div class="disk-cont">
             <div class="title">磁盘使用情况</div>
             <div class="disk-wrapper">
-                <!-- <table>
-                    <tbody>
-                        <tr v-for="row in table">
-                            <td v-for="col in row" :key="col">
-                                {{ col }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table> -->
                 <div class="disk-inner">
                     <div v-for="row in table">
                         <div class="disk-piece" :class="{'disk-cover-color': col===-1}" v-for="col in row" :key="col">{{col}}</div>

@@ -11,9 +11,8 @@
 </template>
 
 <script>
-    import rightClickMenu from '../rightClickMenu/rightClickMenu'
     import store from '../../store/index'
-    import {menuForfile, menuForDir} from '../../common/rightMenu'
+    const ipc = require('electron').ipcRenderer
     const path = require('path')
     export default {
         name: 'file-item',
@@ -25,49 +24,11 @@
                 type: Number
             }
         },
-        components: {
-            rightClickMenu: rightClickMenu
-        },
         data() {
             return {
                 clickNumer: 0,
                 fileItemChoose: false,
-                currentEventToRightMenu: null,
-                rightMenuFlag: false,
-                rightMenuData: [
-                    {
-                        kind: 'open',
-                        name: '打开'
-                    },
-                    {
-                        kind: 'copy',
-                        name: '复制'
-                    },
-                    {
-                        kind: 'cut',
-                        name: '剪切'
-                    },
-                    {
-                        kind: 'post',
-                        name: '粘贴'
-                    },
-                    {
-                        kind: 'delete',
-                        name: '删除'
-                    },
-                    {
-                        kind: 'rename',
-                        name: '重命名'
-                    },
-                    {
-                        kind: 'newFile-txt',
-                        name: '新建文本'
-                    },
-                    {
-                        kind: 'newFile-file',
-                        name: '新建文件夹'
-                    }
-                ]
+                currentEventToRightMenu: null
             }
         },
         computed: {
@@ -87,9 +48,9 @@
                     store.commit('setSelectedIndex', this.index)
                     let item = this.fileNodeItem
                     if (item.type === 0x1) { // is a dir
-                        menuForfile.popup()
+                        ipc.send('menuForDir')
                     } else if (item.type === 0x0) { // is a file
-                        menuForDir.popup()
+                        ipc.send('menuForFile')
                     }
                 } else if (event.button === 0) { // 鼠标左击
                     store.commit('setSelectedIndex', this.index)

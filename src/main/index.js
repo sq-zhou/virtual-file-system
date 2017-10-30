@@ -1,7 +1,10 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
-
+import { app, BrowserWindow, autoUpdater } from 'electron'
+const electron = require('electron')
+const Menu = electron.Menu
+const MenuItem = electron.MenuItem
+const ipc = electron.ipcMain
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -45,6 +48,88 @@ app.on('activate', () => {
     createWindow()
   }
 })
+// 文件的右击显示
+export const menuForFile = new Menu()
+menuForFile.append(new MenuItem({
+  label: '打开',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('openFile')
+  }
+}))
+menuForFile.append(new MenuItem({
+  label: '剪切',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('cutFile')
+  }
+  }
+))
+menuForFile.append(new MenuItem({
+  label: '复制',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('copyFile')
+  }
+  }
+))
+menuForFile.append(new MenuItem({ label: '重命名' }))
+menuForFile.append(new MenuItem({
+  label: '删除',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('deleteFile')
+  }
+}))
+menuForFile.append(new MenuItem({
+  label: '属性',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('fileProperty')
+  }
+}))
+ipc.on('menuForFile', function (event) {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  menuForFile.popup(win)
+})
+
+// 文件夹的右击显示
+export const menuForDir = new Menu()
+menuForDir.append(new MenuItem({
+  label: '打开',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('openFile')
+  }
+}))
+menuForDir.append(new MenuItem({
+  label: '删除',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('deleteFile')
+  }
+}))
+ipc.on('menuForDir', function (event) {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  menuForDir.popup(win)
+})
+// 空白的右击显示
+export const menuForWrapper = new Menu()
+menuForWrapper.append(new MenuItem({
+  label: '新建文件',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('newFile')
+  }
+}))
+menuForWrapper.append(new MenuItem({
+  label: '新建文件夹',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('newDir')
+  }
+}))
+menuForWrapper.append(new MenuItem({
+  label: '粘贴',
+  click: function (item, focusedWindow) {
+    focusedWindow.webContents.send('pasteFile')
+  }
+}))
+ipc.on('menuForWrapper', function (event) {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  menuForWrapper.popup(win)
+})
 
 /**
  * Auto Updater
@@ -53,10 +138,6 @@ app.on('activate', () => {
  * support auto updating. Code Signing with a valid certificate is required.
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
 autoUpdater.on('update-downloaded', () => {
   autoUpdater.quitAndInstall()
 })
@@ -64,4 +145,3 @@ autoUpdater.on('update-downloaded', () => {
 app.on('ready', () => {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
 })
- */
