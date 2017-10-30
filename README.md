@@ -1,9 +1,18 @@
-# fileSystem
+# 一个基于electron-vue的模拟磁盘文件应用
 
-> An electron-vue project
+### 项目根源
 
-#### Build Setup
+本项目是基于操作系统课程设计，功能有基本的文件操作功能，新建，删除，复制，粘贴，剪切，重命名，以及由于文件操作导致FAT表的改变的显示。
 
+### 项目技术基础
+
+项目用到electron-vue,以及zfs-js这个文件操作的插件。
+
+[electron-vue](https://github.com/SimulatedGREG/electron-vue)基于vue和electron的脚手架。
+
+[zfs-js](https://github.com/vincentdchan/zfs-js)是成员[Vincent Chan](https://github.com/vincentdchan)开发的一个插件。
+
+### 使用说明
 ``` bash
 # install dependencies
 npm install
@@ -14,12 +23,5 @@ npm run dev
 # build electron application for production
 npm run build
 
-
 # lint all JS/Vue component files in `src/`
 npm run lint
-
-```
-
----
-
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[de85f81](https://github.com/SimulatedGREG/electron-vue/tree/de85f81890c01500113738bfe57bef136f9fbf52) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
