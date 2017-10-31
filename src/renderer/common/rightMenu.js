@@ -50,7 +50,15 @@ menuForfile.append(new MenuItem({
     }
 }))
 menuForfile.append(new MenuItem({
-    label: '属性'
+    label: '属性',
+    click() {
+        let selectedIndex = store.state.selectedIndex
+        if (selectedIndex > -1) {
+            let item = store.state.fileItems[selectedIndex]
+            let _path = path.posix.join(store.state.path, item.name)
+            store.dispatch('showFileProperty', _path)
+        }
+    }
 }))
 // 文件夹的右击显示
 export const menuForDir = new Menu()
