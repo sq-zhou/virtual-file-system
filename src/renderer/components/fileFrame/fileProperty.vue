@@ -1,39 +1,31 @@
 <template>
-    <div class="fileProperty" v-if="filePropertyFlag">
+    <div class="fileProperty">
         <div class="fileProperty-wrapper">
             <div class="header">
-                <span>文件名</span><span class="close" @click="close"><i class="fa fa-close"></i></span>
+                <span>文件属性 - {{ fp.name }}</span><span class="close" @click="close"><i class="fa fa-close"></i></span>
             </div>
             <div class="middle">
                 <div class="middle-wrapper">
                     <div class="cont">
-                        <span class="cont-title">文件名</span>
-                        <span class="cont-content">abc.txt</span>
+                        <span class="cont-title">路径</span>
+                        <span class="cont-content">{{ fp.full_path }}</span>
                     </div>
                     <div class="line"></div>
-                     <div class="cont">
-                        <span class="cont-title">时间</span>
-                        <span class="cont-content">2018/10/09</span>
+                    <div class="cont">
+                        <span class="cont-title">开始块号</span>
+                        <span class="cont-content">{{ fp.begin_num }}</span>
                     </div>
                     <div class="cont">
                         <span class="cont-title">大小</span>
-                        <span class="cont-content">2KB</span>
+                        <span class="cont-content">{{ fp.size }}</span>
                     </div>
                     <div class="cont">
-                        <span class="cont-title">属性标题</span>
-                        <span class="cont-content">属性特点</span>
+                        <span class="cont-title">创建时间</span>
+                        <span class="cont-content">{{ fp.created_time }}</span>
                     </div>
-                     <div class="cont">
-                        <span class="cont-title">属性标题</span>
-                        <span class="cont-content">属性特点</span>
-                    </div>
-                    <div class="line"></div>
-                     <div class="cont">
-                        <span class="cont-title">属性</span>
-                        <span class="cont-content">
-                            <input type="radio" name="property" value="read"><span>只读</span>
-                            <input type="radio" name="property" value="write"><span>读写</span>
-                        </span>
+                    <div class="cont">
+                        <span class="cont-title">更新时间</span>
+                        <span class="cont-content">{{ fp.edited_time }}</span>
                     </div>
                 </div>
             </div>
@@ -49,14 +41,10 @@
 <script>
     export default {
         name: 'fileProperty',
-        data() {
-            return {
-                filePropertyFlag: true
-            }
-        },
+        props: ['fp', 'index'],
         methods: {
             close() {
-                this.filePropertyFlag = false
+                this.$store.commit('removeFilePropertiesById', this.index)
             }
         }
     }

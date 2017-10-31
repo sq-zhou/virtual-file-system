@@ -10,7 +10,8 @@
             v-bind:fileItem="item"
             v-bind:index="index">
             </file-frame-text>
-        <file-property v-if="filePropertyFlag"></file-property>
+        <file-property v-for="(fp, index) in fileProperties" 
+            :fp="fp" :index="index" :key="index"></file-property>
     </div>
 </template>
 
@@ -21,6 +22,7 @@
     import fileProperty from '../fileFrame/fileProperty'
     import {copyFile, cutFile, pasteFile, deleteFile, newFile, newDir} from '../../common/operateFile'
     import store from '../../store/index'
+    import * as path from 'path'
     const ipc = require('electron').ipcRenderer
     export default {
         name: 'file-show',
@@ -103,6 +105,14 @@
             })
             ipc.on('newDir', function() {
                newDir()
+            })
+            ipc.on('fileProperty', function () {
+                let selectedIndex = store.state.selectedIndex
+                if (selectedIndex > -1) {
+                    let item = store.state.fileItems[selectedIndex]
+                    let _path = path.posix.join(store.state.path, item.name)
+                    store.dispatch('showFileProperty', _path)
+                }
             })
         }
     }

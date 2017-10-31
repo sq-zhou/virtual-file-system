@@ -53,9 +53,6 @@ const state = {
     ],
 
     fileProperties: [
-        {
-            path: '/abc.txt'
-        }
     ],
 
     copyPath: null,
@@ -68,6 +65,11 @@ let pathHistory = [
 
 // 然后给 actions 注册一个事件处理函数，当这个函数被触发时，将状态提交到 mutaions中处理
 const actions = {
+    showFileProperty({commit}, path) {
+        let pp = zfs.stat(path)
+        pp.full_path = path
+        commit('addFileProperty', pp)
+    },
     openFile({commit}, path) {
         let fd = zfs.open(path, zfs.ZFILE_FLAG_READ)
         let content = zfs.readAll(fd)
@@ -165,6 +167,12 @@ const mutations = {
     },
     removeFileEditorById(state, id) {
         state.fileEditors.splice(id, 1)
+    },
+    removeFilePropertiesById(state, id) {
+        state.fileProperties.splice(id, 1)
+    },
+    addFileProperty(state, pp) {
+        state.fileProperties.push(pp)
     },
     setSelectedIndex(state, value) {
         state.selectedIndex = value
