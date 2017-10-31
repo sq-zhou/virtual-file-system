@@ -4,8 +4,8 @@
             <div class="title">磁盘使用情况</div>
             <div class="disk-wrapper">
                 <div class="disk-inner">
-                    <div v-for="row in table">
-                        <div class="disk-piece" :class="{'disk-cover-color': col===-1}" v-for="col in row" :key="col">{{col}}</div>
+                    <div v-for="(row, indexA) in table" :key="indexA">
+                        <div class="disk-piece" :class="{'disk-cover-color': col===-1}" v-for="(col, indexB) in row" :key="indexB">{{col}}</div>
                     </div>
                 </div>
             </div>
