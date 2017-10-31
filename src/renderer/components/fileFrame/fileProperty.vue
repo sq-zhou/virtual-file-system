@@ -11,7 +11,6 @@
                         <span class="cont-content">abc.txt</span>
                     </div>
                     <div class="line"></div>
-                    <!-- cont-title 最好字数一直，三个或四个字 -->
                      <div class="cont">
                         <span class="cont-title">时间</span>
                         <span class="cont-content">2018/10/09</span>
