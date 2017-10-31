@@ -49,7 +49,7 @@
                         name: '粘贴'
                     }
                 ],
-                filePropertyFlag: false
+                filePropertyFlag: true
             }
         },
         computed: {
@@ -67,6 +67,9 @@
             },
             fileEditors() {
                 return this.$store.state.fileEditors
+            },
+            fileProperties() {
+                return this.$store.state.fileProperties
             }
         },
         components: {

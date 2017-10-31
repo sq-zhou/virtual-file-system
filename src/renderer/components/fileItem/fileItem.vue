@@ -33,41 +33,7 @@
                 clickNumer: 0,
                 fileItemChoose: false,
                 currentEventToRightMenu: null,
-                rightMenuFlag: false,
-                rightMenuData: [
-                    {
-                        kind: 'open',
-                        name: '打开'
-                    },
-                    {
-                        kind: 'copy',
-                        name: '复制'
-                    },
-                    {
-                        kind: 'cut',
-                        name: '剪切'
-                    },
-                    {
-                        kind: 'post',
-                        name: '粘贴'
-                    },
-                    {
-                        kind: 'delete',
-                        name: '删除'
-                    },
-                    {
-                        kind: 'rename',
-                        name: '重命名'
-                    },
-                    {
-                        kind: 'newFile-txt',
-                        name: '新建文本'
-                    },
-                    {
-                        kind: 'newFile-file',
-                        name: '新建文件夹'
-                    }
-                ]
+                rightMenuFlag: false
             }
         },
         computed: {
@@ -166,4 +132,3 @@
             text-align: right
             font-size: 14px
 </style>
-

@@ -52,6 +52,12 @@ const state = {
         // }
     ],
 
+    fileProperties: [
+        {
+            path: '/abc.txt'
+        }
+    ],
+
     copyPath: null,
     isCut: false
 }
