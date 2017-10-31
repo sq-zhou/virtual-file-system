@@ -30,8 +30,8 @@
                 </div>
             </div>
             <div class="bottom">
-                <span class="sure">确定</span>
-                <span class="cancel" @click="close">取消</span>
+                <span class="sure" @click="close">确定</span>
+                <!-- <span class="cancel">取消</span> -->
             </div>
         </div>
         <div class="fileProperty-fade"></div>
@@ -56,34 +56,37 @@
         left: 50%
         top: 50%
         width: 430px
-        height: 310px
+        height: 280px
         margin-left: -215px
-        margin-top: -155px
-        background: #f0f0f0
+        margin-top: -140px
+        background: #ffffff
+        box-shadow: 0 0 6px 2px #0bb0e6
+        border: 1px solid #fff
         z-index: 1000
         .header
             width: 100%
             height: 33px
             line-height: 33px
-            font-size: 13px
-            background: #fff
+            font-size: 14px
+            background: #0bb0e6
+            color: #ffffff
             span 
                 margin: 0 5px 0 13px
             .close
                 float: right
                 margin: 0 13px 
         .middle
-            margin: 10px
+            margin: 15px 10px 10px 10px
             background: #ffffff
             .middle-wrapper
                 padding: 5px 8px 40px 8px
-                border: 1px solid #d9d9d9
+                border: 1px solid #0bb0e6
                 .cont
                     padding: 5px 2px
-                    font-size: 13px
+                    font-size: 14px
                     .cont-title
                         display: inline-block
-                        width: 55px
+                        width: 75px
                     .cont-content
                         display: inline-block
                         margin: 0 15px
@@ -99,11 +102,11 @@
                 display: inline-block
                 margin: 0 10px
                 padding: 3px 15px
-                border: 1px solid #adadad
-                font-size: 13px
-            span:first-of-type
-                margin: 0
+                border: 1px solid #0bb0e6
+                font-size: 14px
+                cursor: default
     .fileProperty-fade
+        display:none
         position: fixed
         top: 0
         left: 0

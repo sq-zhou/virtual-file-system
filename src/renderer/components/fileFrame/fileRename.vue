@@ -3,7 +3,7 @@
         <div class="model-normal">
             <div class="model-normal-header">
                 <a class="model-name">文件名</a>
-                <div class="model-close"><i class="fa fa-close"></i></div>
+                <div class="model-close" @click="cancel"><i class="fa fa-close"></i></div>
             </div>
             <div class="model-normal-middle">
                 <input placeholder="名字" ref="inputValue">
@@ -46,17 +46,11 @@
                     let dirPath = path.posix.join(showPath, data)
                     this.$store.dispatch('createDir', {showPath, dirPath})
                 } else if (this.operateFile === 'rename') {
-                    // let arrayId = this.$store.state.rightClickMenuPath
-                    // this.fileTree.renameNode(arrayId, data)
-                    // this.itemTotal = this.fileTree.getChildrenNodeList(this.currentPath)
-                    // store.commit('saveTreeNodeArray', this.fileTree.treeNodeArray) // 赋值给FileTree,用到Vuex
-                    // store.commit('saveRightClickMenuPath', '') // 用到vuex
                 }
             },
             cancel() {
-                // this.$emit('fileRenameShow', false)
-                this.$store.commit('setFileRenameShow', false)
                 this.$refs.inputValue.value = ''
+                this.$store.commit('setFileRenameShow', false)
             },
             clickStop() {
             }
@@ -72,7 +66,7 @@
         margin-top: -68px
         margin-left: -150px
         width: 300px
-        height: 136px
+        height: 130px
         z-index: 1000
         border-radius: 2px
         background: #ffffff
@@ -88,13 +82,14 @@
         .model-normal-middle
             overflow: hidden
             text-align: center
-            input, input:focus
+            input
                 width: 80%
                 margin: 0 auto
                 padding: 3px 6px
                 height: 27px
                 font-size: 15px
                 border: 1px solid #96d8fc
+                outline: none
         .model-normal-bottom
             .model-right-send
                 margin: 15px 20px 0 0

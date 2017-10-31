@@ -20,9 +20,8 @@
     import fileFrameText from '../fileFrame/fileText'
     import fileRename from '../fileFrame/fileRename'
     import fileProperty from '../fileFrame/fileProperty'
-    import {copyFile, cutFile, pasteFile, deleteFile, newFile, newDir} from '../../common/operateFile'
+    import {openFile, copyFile, cutFile, pasteFile, deleteFile, newFile, newDir, openFileProperty} from '../../common/operateFile'
     import store from '../../store/index'
-    import * as path from 'path'
     const ipc = require('electron').ipcRenderer
     export default {
         name: 'file-show',
@@ -88,6 +87,9 @@
             }
         },
         created() {
+            ipc.on('openFile', function() {
+               openFile()
+            })
             ipc.on('cutFile', function() {
                cutFile()
             })
@@ -107,12 +109,13 @@
                newDir()
             })
             ipc.on('fileProperty', function () {
-                let selectedIndex = store.state.selectedIndex
-                if (selectedIndex > -1) {
-                    let item = store.state.fileItems[selectedIndex]
-                    let _path = path.posix.join(store.state.path, item.name)
-                    store.dispatch('showFileProperty', _path)
-                }
+                openFileProperty()
+                // let selectedIndex = store.state.selectedIndex
+                // if (selectedIndex > -1) {
+                //     let item = store.state.fileItems[selectedIndex]
+                //     let _path = path.posix.join(store.state.path, item.name)
+                //     store.dispatch('showFileProperty', _path)
+                // }
             })
         }
     }

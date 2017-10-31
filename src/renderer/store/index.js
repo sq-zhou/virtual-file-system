@@ -1,12 +1,3 @@
-/*   vuex的使用
-   1、 引入  import store from '../../store/index'
-   2、 mutations设置状态的方法 store.commit('saveMsg', '456') //带参数
-   3、 actions(含异步操作，一般异步操作用actions),例子
-   store.dispatch('saveDataToRightClickMenu', {event, path}).then(() => {
-                    console.log(store.state.msgToRightClickMenu)
-                })
-   4、获取方法 console.log(store.state.msgToRightClickMenu)
-* */
 import Vue from 'vue'
 import Vuex from 'vuex'
 const _ = require('lodash')

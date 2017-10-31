@@ -13,7 +13,16 @@ export const deleteFile = function() {
     }
 }
 export const openFile = function() {
-    console.log('fileItem')
+    let selectedIndex = store.state.selectedIndex
+    const item = store.state.fileItems[selectedIndex]
+    const showPath = path.posix.join(store.state.path, item.name)
+    if (item.type === 0x1) { // is a dir
+        store.dispatch('changeDir', showPath)
+    } else if (item.type === 0x0) { // is a file
+        // something
+        store.commit('setSelectedIndex', selectedIndex)
+        store.dispatch('openFile', showPath)
+    }
 }
 export const copyFile = function() {
     let selectedIndex = store.state.selectedIndex
@@ -49,4 +58,12 @@ export const pasteFile = function() {
         showPath: store.state.path,
         isCut: store.state.isCut
     })
+}
+export const openFileProperty = function() {
+    let selectedIndex = store.state.selectedIndex
+    if (selectedIndex > -1) {
+        let item = store.state.fileItems[selectedIndex]
+        let _path = path.posix.join(store.state.path, item.name)
+        store.dispatch('showFileProperty', _path)
+    }
 }
