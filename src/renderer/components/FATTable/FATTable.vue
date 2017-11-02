@@ -41,7 +41,7 @@
         overflow-y: scroll
         .disk-cont
             margin: 0 auto
-            padding: 15px 0 0 25px
+            padding: 15px 0 0 30px
             .title
                 padding: 0 0 15px 0;
                 font-size: 15px
