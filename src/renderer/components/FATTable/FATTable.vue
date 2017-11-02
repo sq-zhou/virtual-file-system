@@ -36,7 +36,7 @@
         right: 0
         top: 30px
         bottom: 0
-        width: 310px
+        width: 280px
         background: #dddddd
         overflow-y: scroll
         .disk-cont
@@ -53,9 +53,9 @@
                             display: inline-block
                             vertical-align: top
                             margin: 2px 2px
-                            width: 42px
-                            height: 42px
-                            line-height: 42px
+                            width: 35px
+                            height: 35px
+                            line-height: 35px
                             text-align: center
                             font-size: 12px
                             background: #F9F9FA

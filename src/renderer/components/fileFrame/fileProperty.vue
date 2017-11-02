@@ -130,6 +130,7 @@
                 border: 1px solid #0bb0e6
                 font-size: 14px
                 cursor: pointer
+                user-select: none
     .fileProperty-fade
         display:none
         position: fixed

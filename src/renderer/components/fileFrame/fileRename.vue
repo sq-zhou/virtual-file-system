@@ -113,10 +113,11 @@
                 font-size: 15px
                 .shareAdd-sure-send
                     cursor: pointer
+                    user-select: none
                 .cancel-open
                     margin: 15px 15px 0 0
                     cursor: pointer
-
+                    user-select: none
     .model-normal-wrapper
         position: fixed
         top: 0
