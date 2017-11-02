@@ -21,6 +21,7 @@
 
 <script>
     const path = require('path')
+    const toastr = require('toastr')
 
     export default {
         name: 'fileRename',
@@ -38,10 +39,24 @@
                 let kind = this.$store.state.kind
 
                 if (kind === 'newFile') {
+                    if (data.indexOf('/') >= 0) {
+                        toastr.error('文件名包含不合法字符')
+                        return
+                    } else if (data === '..') {
+                        toastr.error('文件名包含不合法字符')
+                        return
+                    }
                     let showPath = this.$store.state.path
                     let filePath = path.posix.join(showPath, data)
                     this.$store.dispatch('newFile', {showPath, filePath})
                 } else if (kind === 'newDir') {
+                    if (data.indexOf('/') >= 0) {
+                        toastr.error('文件名包含不合法字符')
+                        return
+                    } else if (data === '..') {
+                        toastr.error('文件名包含不合法字符')
+                        return
+                    }
                     let showPath = this.$store.state.path
                     let dirPath = path.posix.join(showPath, data)
                     this.$store.dispatch('createDir', {showPath, dirPath})

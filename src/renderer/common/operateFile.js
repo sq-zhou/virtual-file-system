@@ -3,7 +3,6 @@ const path = require('path')
 export const deleteFile = function() {
     let selectedIndex = store.state.selectedIndex
     if (selectedIndex > -1) {
-        console.log('delete34')
         let item = store.state.fileItems[selectedIndex]
         let removePath = path.posix.join(store.state.path, item.name)
         store.dispatch('removeFile', {

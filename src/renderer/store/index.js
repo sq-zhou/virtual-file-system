@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 const _ = require('lodash')
 const zfs = require('zfs-js')
+const toastr = require('toastr')
 
 zfs.connect('test.disk')
 
@@ -82,6 +83,10 @@ const actions = {
         commit('setFAT', _.chunk(buffer, 8))
     },
     newFile({commit}, {showPath, filePath}) {
+        if (zfs.stat(filePath) !== null) {
+            toastr.error('文件已存在，无法创建')
+            return
+        }
         let fd = zfs.open(filePath, zfs.ZFILE_FLAG_WRITE)
         zfs.close(fd)
         commit('setFileItems', zfs.listdir(showPath))
@@ -95,6 +100,10 @@ const actions = {
         commit('setSelectedIndex', -1)
     },
     createDir({commit}, {showPath, dirPath}) {
+        if (zfs.stat(dirPath) !== null) {
+            toastr.error('文件夹已存在，无法创建')
+            return
+        }
         zfs.createdir(dirPath)
         commit('setFileItems', zfs.listdir(showPath))
         commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
@@ -117,7 +126,7 @@ const actions = {
     pasteFile({commit}, {srcPath, distPath, showPath, isCut}) {
         if (srcPath === null || distPath === null) return
 
-        if (zfs.stat(distPath) !== null) {
+        while (zfs.stat(distPath) !== null) {
             distPath += ' -副本'
         }
 
