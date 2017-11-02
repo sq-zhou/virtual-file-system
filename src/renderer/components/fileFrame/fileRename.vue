@@ -88,12 +88,13 @@
         transition: 0.2s all linear
         .model-normal-header
             position: relative
-            padding: 15px 20px 13px 20px
+            padding: 10px 20px 15px 20px
             font-size: 15px
             .model-close
                 position: absolute
                 right: 20px
-                top: 13px
+                top: 10px
+                cursor: pointer
         .model-normal-middle
             overflow: hidden
             text-align: center

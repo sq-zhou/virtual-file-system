@@ -34,7 +34,7 @@ const state = {
     fileItems: zfs.listdir('/'),
 
     // FAT文件分配表
-    FATTable: _.chunk(zfs.getFATBuffer(), 4),
+    FATTable: _.chunk(zfs.getFATBuffer(), 5),
 
     // FileEditors
     fileEditors: [
@@ -76,11 +76,11 @@ const actions = {
         let fd = zfs.open(path, zfs.ZFILE_FLAG_WRITE)
         zfs.writeAll(fd, Buffer.from(content))
         zfs.close(fd)
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 5))
     },
     loadFAT({commit}) {
         let buffer = zfs.getFATBuffer()
-        commit('setFAT', _.chunk(buffer, 4))
+        commit('setFAT', _.chunk(buffer, 5))
     },
     newFile({commit}, {showPath, filePath}) {
         if (zfs.stat(filePath) !== null) {
@@ -90,13 +90,13 @@ const actions = {
         let fd = zfs.open(filePath, zfs.ZFILE_FLAG_WRITE)
         zfs.close(fd)
         commit('setFileItems', zfs.listdir(showPath))
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 5))
         commit('setSelectedIndex', -1)
     },
     removeFile({commit}, {showPath, filePath}) {
         zfs.remove(filePath)
         commit('setFileItems', zfs.listdir(showPath))
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 5))
         commit('setSelectedIndex', -1)
     },
     createDir({commit}, {showPath, dirPath}) {
@@ -106,7 +106,7 @@ const actions = {
         }
         zfs.createdir(dirPath)
         commit('setFileItems', zfs.listdir(showPath))
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 5))
         commit('setSelectedIndex', -1)
     },
     changeDir({commit}, showPath) {
@@ -147,7 +147,7 @@ const actions = {
         }
 
         commit('setFileItems', zfs.listdir(showPath))
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 5))
         commit('setSelectedIndex', -1)
     }
 }

@@ -115,9 +115,9 @@
                 font-size: 14px
             .content-text::-webkit-scrollbar
                 width: 10px
-                background-color: #F5F5F5
+                background-color: #ffffff
             .content-text::-webkit-scrollbar-track
-                background-color: #F5F5F5;
+                background-color: #ffffff
             .content-text::-webkit-scrollbar-thumb
                 background-color: #ada3ab
 </style>

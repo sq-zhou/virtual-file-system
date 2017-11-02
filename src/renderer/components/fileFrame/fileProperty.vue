@@ -27,6 +27,11 @@
                         <span class="cont-title">更新时间</span>
                         <span class="cont-content">{{ fp.edited_time }}</span>
                     </div>
+                      <div class="cont">
+                        <span class="cont-title">文件属性</span>
+                        <input type="checkbox"/>
+                        <span>只读</span>
+                    </div>
                 </div>
             </div>
             <div class="bottom">
@@ -56,9 +61,9 @@
         left: 50%
         top: 50%
         width: 430px
-        height: 280px
+        height: 326px
         margin-left: -215px
-        margin-top: -140px
+        margin-top: -163px
         background: #ffffff
         box-shadow: 0 0 6px 2px #0bb0e6
         border: 1px solid #fff
@@ -74,9 +79,10 @@
                 margin: 0 5px 0 13px
             .close
                 float: right
-                margin: 0 13px 
+                margin: 0 13px
+                cursor: pointer 
         .middle
-            margin: 15px 10px 10px 10px
+            margin: 13px 10px 10px 10px
             background: #ffffff
             .middle-wrapper
                 padding: 5px 8px 40px 8px
@@ -85,11 +91,18 @@
                     padding: 5px 2px
                     font-size: 14px
                     .cont-title
+                        vertical-align: top
                         display: inline-block
                         width: 75px
                     .cont-content
+                        vertical-align: top
                         display: inline-block
                         margin: 0 15px
+                    input
+                        display: inline-block
+                        vertical-align: top
+                        margin : 4px 5px 0 15px
+                        box-sizing:border-box
                 .line
                     margin: 3px 0
                     width: 100%
@@ -104,7 +117,7 @@
                 padding: 3px 15px
                 border: 1px solid #0bb0e6
                 font-size: 14px
-                cursor: default
+                cursor: pointer
     .fileProperty-fade
         display:none
         position: fixed
