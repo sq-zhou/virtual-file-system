@@ -127,7 +127,7 @@
         top: 30px
         border: 0
         bottom: 0
-        right: 310px
+        right: 280px
         left: 0
         overflow: auto
         .file-inner
