@@ -29,7 +29,7 @@
                     </div>
                       <div class="cont">
                         <span class="cont-title">文件属性</span>
-                        <input type="checkbox"/>
+                        <input v-model="readOnly" type="checkbox"/>
                         <span>只读</span>
                     </div>
                 </div>
@@ -47,8 +47,20 @@
     export default {
         name: 'fileProperty',
         props: ['fp', 'index'],
+        data() {
+            return {
+                readOnly: this.fp.attr === 1
+            }
+        },
         methods: {
             close() {
+                let isReadOnlySource = this.fp.attr === 1
+                if (this.readOnly !== isReadOnlySource) {
+                    this.$store.dispatch('changeAttr', {
+                        path: this.fp.full_path,
+                        attr: this.readOnly ? 0x1 : 0
+                    })
+                }
                 this.$store.commit('removeFilePropertiesById', this.index)
             }
         }

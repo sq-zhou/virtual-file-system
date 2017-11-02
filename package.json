@@ -61,7 +61,7 @@
     "vue-electron": "^1.0.6",
     "vue-router": "^2.5.3",
     "vuex": "^2.3.1",
-    "zfs-js": "^2.0.4"
+    "zfs-js": "^2.0.5"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
