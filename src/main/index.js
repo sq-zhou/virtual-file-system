@@ -70,7 +70,6 @@ menuForFile.append(new MenuItem({
   }
   }
 ))
-menuForFile.append(new MenuItem({ label: '重命名' }))
 menuForFile.append(new MenuItem({
   label: '删除',
   click: function (item, focusedWindow) {
