@@ -57,6 +57,9 @@ let pathHistory = [
 
 // 然后给 actions 注册一个事件处理函数，当这个函数被触发时，将状态提交到 mutaions中处理
 const actions = {
+    changeAttr({commit}, {path, attr}) {
+        zfs.changeAttr(path, attr)
+    },
     showFileProperty({commit}, path) {
         let pp = zfs.stat(path)
         pp.full_path = path
@@ -73,6 +76,11 @@ const actions = {
         })
     },
     saveFileEditorToFile({commit}, {path, content}) {
+        let stat = zfs.stat(path)
+        if (stat.attr === 1) {
+            toastr.error('你正在尝试写入一个只读文件')
+            return
+        }
         let fd = zfs.open(path, zfs.ZFILE_FLAG_WRITE)
         zfs.writeAll(fd, Buffer.from(content))
         zfs.close(fd)
