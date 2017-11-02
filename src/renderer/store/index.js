@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 const _ = require('lodash')
 const zfs = require('zfs-js')
+const toastr = require('toastr')
 
 zfs.connect('test.disk')
 
@@ -33,7 +34,7 @@ const state = {
     fileItems: zfs.listdir('/'),
 
     // FAT文件分配表
-    FATTable: _.chunk(zfs.getFATBuffer(), 8),
+    FATTable: _.chunk(zfs.getFATBuffer(), 4),
 
     // FileEditors
     fileEditors: [
@@ -75,29 +76,37 @@ const actions = {
         let fd = zfs.open(path, zfs.ZFILE_FLAG_WRITE)
         zfs.writeAll(fd, Buffer.from(content))
         zfs.close(fd)
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
     },
     loadFAT({commit}) {
         let buffer = zfs.getFATBuffer()
-        commit('setFAT', _.chunk(buffer, 8))
+        commit('setFAT', _.chunk(buffer, 4))
     },
     newFile({commit}, {showPath, filePath}) {
+        if (zfs.stat(filePath) !== null) {
+            toastr.error('文件已存在，无法创建')
+            return
+        }
         let fd = zfs.open(filePath, zfs.ZFILE_FLAG_WRITE)
         zfs.close(fd)
         commit('setFileItems', zfs.listdir(showPath))
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
         commit('setSelectedIndex', -1)
     },
     removeFile({commit}, {showPath, filePath}) {
         zfs.remove(filePath)
         commit('setFileItems', zfs.listdir(showPath))
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
         commit('setSelectedIndex', -1)
     },
     createDir({commit}, {showPath, dirPath}) {
+        if (zfs.stat(dirPath) !== null) {
+            toastr.error('文件夹已存在，无法创建')
+            return
+        }
         zfs.createdir(dirPath)
         commit('setFileItems', zfs.listdir(showPath))
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
         commit('setSelectedIndex', -1)
     },
     changeDir({commit}, showPath) {
@@ -117,7 +126,7 @@ const actions = {
     pasteFile({commit}, {srcPath, distPath, showPath, isCut}) {
         if (srcPath === null || distPath === null) return
 
-        if (zfs.stat(distPath) !== null) {
+        while (zfs.stat(distPath) !== null) {
             distPath += ' -副本'
         }
 
@@ -138,7 +147,7 @@ const actions = {
         }
 
         commit('setFileItems', zfs.listdir(showPath))
-        commit('setFAT', _.chunk(zfs.getFATBuffer(), 8))
+        commit('setFAT', _.chunk(zfs.getFATBuffer(), 4))
         commit('setSelectedIndex', -1)
     }
 }
