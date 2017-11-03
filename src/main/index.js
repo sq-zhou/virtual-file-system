@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, autoUpdater } from 'electron'
+import { app, BrowserWindow } from 'electron'
 const electron = require('electron')
 const Menu = electron.Menu
 const MenuItem = electron.MenuItem
@@ -25,7 +25,8 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     height: 563,
     useContentSize: true,
-    width: 1000
+    width: 900,
+    autoHideMenuBar: true
   })
 
   mainWindow.loadURL(winURL)
@@ -137,10 +138,10 @@ ipc.on('menuForWrapper', function (event) {
  * support auto updating. Code Signing with a valid certificate is required.
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
+// autoUpdater.on('update-downloaded', () => {
+//   autoUpdater.quitAndInstall()
+// })
 
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
+// app.on('ready', () => {
+//   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
+// })

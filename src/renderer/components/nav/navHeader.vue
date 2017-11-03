@@ -49,6 +49,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
     .nav-header
+        opacity: 0.75
         display: flex
         align-items: center
         width: 100%
@@ -68,7 +69,7 @@
             padding: 0 0 0 15px
             height: 23px
             line-height: 23px
-            border: 1px solid #cdc2cb
+            border: 1px solid #a8a8a8
             .pathPart
                 margin: 0 0
                 font-size: 14px

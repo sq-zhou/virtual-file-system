@@ -19,7 +19,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "my-ele",
+    "productName": "os-sim",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"

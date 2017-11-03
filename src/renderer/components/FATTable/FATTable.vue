@@ -39,6 +39,7 @@
         width: 280px
         background: #dddddd
         overflow-y: scroll
+        opacity: 0.75
         .disk-cont
             margin: 0 auto
             padding: 15px 0 0 30px
