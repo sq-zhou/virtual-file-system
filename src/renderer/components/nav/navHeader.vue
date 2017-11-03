@@ -68,7 +68,7 @@
             padding: 0 0 0 15px
             height: 23px
             line-height: 23px
-            border: 1px solid #cdc2cb
+            border: 1px solid #a8a8a8
             .pathPart
                 margin: 0 0
                 font-size: 14px

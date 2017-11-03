@@ -1,22 +1,24 @@
 <template>
-    <div class="add-file-frame">
-        <div class="file-model">
-            <div class="title">
-                <span>{{ title }}</span>
-                <span class="close fa fa-window-close" @click="modelClose()"></span>
+    <transition name="slide-fade">
+        <div class="add-file-frame">
+            <div class="file-model">
+                <div class="title">
+                    <span>{{ title }}</span>
+                    <span class="close fa fa-window-close" @click="modelClose()"></span>
+                </div>
+                <div class="operation">
+                    <i class="fa fa-save" @click="saveText" title="保存"></i>
+                </div>
+                <div class="content">
+                    <textarea class="content-text" 
+                    contenteditable="true" 
+                    ref="contentText" v-model="contentBuffer">
+                    </textarea>
+                </div>
             </div>
-            <div class="operation">
-                <i class="fa fa-save" @click="saveText" title="保存"></i>
-            </div>
-            <div class="content">
-                <textarea class="content-text" 
-                contenteditable="true" 
-                ref="contentText" v-model="contentBuffer">
-                </textarea>
-            </div>
+            <div class="file-fade"></div>
         </div>
-        <div class="file-fade"></div>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -77,7 +79,7 @@
             padding: 5px 0 5px 8px
             font-size: 14px
             color: white
-            background: #0bb0e6
+            background: dimgrey
             .close
                 position: absolute
                 top: 5px
@@ -120,4 +122,10 @@
                 background-color: #ffffff
             .content-text::-webkit-scrollbar-thumb
                 background-color: #ada3ab
+    .slide-fade-enter-active 
+        transition: opacity .5s
+    .slide-fade-leave-active
+        transition: opacity .5s
+    .slide-fade-enter, .slide-fade-leave-to
+        opacity: 0
 </style>

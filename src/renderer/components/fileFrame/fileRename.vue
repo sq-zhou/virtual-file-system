@@ -1,22 +1,24 @@
 <template>
-    <div class="fileRename" @mousedown.stop="clickStop">
-        <div class="model-normal">
-            <div class="model-normal-header">
-                <a class="model-name">文件名</a>
-                <div class="model-close" @click="cancel"><i class="fa fa-close"></i></div>
-            </div>
-            <div class="model-normal-middle">
-                <input placeholder="名字" ref="inputValue">
-            </div>
-            <div class="model-normal-bottom">
-                <div class="model-right-send">
-                    <span class="cancel-open" @click="cancel">取消</span>
-                    <span class="shareAdd-sure-send" @click="sureSend">确认</span>
+    <transition name="slide-fade">
+        <div class="fileRename" @mousedown.stop="clickStop">
+            <div class="model-normal">
+                <div class="model-normal-header">
+                    <a class="model-name">文件名</a>
+                    <div class="model-close" @click="cancel"><i class="fa fa-close"></i></div>
+                </div>
+                <div class="model-normal-middle">
+                    <input placeholder="名字" ref="inputValue">
+                </div>
+                <div class="model-normal-bottom">
+                    <div class="model-right-send">
+                        <span class="cancel-open" @click="cancel">取消</span>
+                        <span class="shareAdd-sure-send" @click="sureSend">确认</span>
+                    </div>
                 </div>
             </div>
+            <div class="model-normal-wrapper"></div>
         </div>
-        <div class="model-normal-wrapper"></div>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -127,5 +129,11 @@
         z-index: 800
         background: #4b4149
         opacity: 0.3
+    .slide-fade-enter-active 
+        transition: opacity .5s
+    .slide-fade-leave-active
+        transition: opacity .5s
+    .slide-fade-enter, .slide-fade-leave-to
+        opacity: 0
 </style>
 
