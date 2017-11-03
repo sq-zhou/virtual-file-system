@@ -17,15 +17,15 @@
                     </div>
                     <div class="cont">
                         <span class="cont-title">大小</span>
-                        <span class="cont-content">{{ fp.size }}</span>
+                        <span class="cont-content">{{ fp.size }} 字节</span>
                     </div>
                     <div class="cont">
                         <span class="cont-title">创建时间</span>
-                        <span class="cont-content">{{ fp.created_time }}</span>
+                        <span class="cont-content">{{ fp.created_time | bTime }}</span>
                     </div>
                     <div class="cont">
                         <span class="cont-title">更新时间</span>
-                        <span class="cont-content">{{ fp.edited_time }}</span>
+                        <span class="cont-content">{{ fp.edited_time | bTime }}</span>
                     </div>
                       <div class="cont">
                         <span class="cont-title">文件属性</span>
@@ -63,6 +63,12 @@
                 }
                 this.$store.commit('removeFilePropertiesById', this.index)
             }
+        },
+        filters: {
+            bTime: (input) => {
+            let time = new Date(input)
+            return `${time.getFullYear()}年${time.getMonth() + 1}月${time.getDate()}日 ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+            }
         }
     }
 </script>
@@ -85,7 +91,7 @@
             height: 33px
             line-height: 33px
             font-size: 14px
-            background: #0bb0e6
+            background: dimgrey
             color: #ffffff
             span 
                 margin: 0 5px 0 13px
@@ -98,7 +104,7 @@
             background: #ffffff
             .middle-wrapper
                 padding: 5px 8px 40px 8px
-                border: 1px solid #0bb0e6
+                border: 1px solid dimgrey
                 .cont
                     padding: 5px 2px
                     font-size: 14px
@@ -127,7 +133,7 @@
                 display: inline-block
                 margin: 0 10px
                 padding: 3px 15px
-                border: 1px solid #0bb0e6
+                border: 1px solid dimgrey
                 font-size: 14px
                 cursor: pointer
                 user-select: none
