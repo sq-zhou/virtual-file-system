@@ -1,9 +1,9 @@
 <template>
     <transition name="slide-fade">
         <div class="fileProperty">
-            <div class="fileProperty-wrapper">
-                <div class="header">
-                    <span>文件属性 - {{ fp.name }}</span><span class="close" @click="close"><i class="fa fa-close"></i></span>
+            <div class="fileProperty-wrapper" ref="fileModel">
+                <div class="header" @mousedown="getMoveFile($event)" ref="header">
+                    <span>文件属性 - {{ fp.name }}</span><span class="close" @click.stop="close"><i class="fa fa-close"></i></span>
                 </div>
                 <div class="middle">
                     <div class="middle-wrapper">
@@ -51,7 +51,8 @@
         props: ['fp', 'index'],
         data() {
             return {
-                readOnly: this.fp.attr === 1
+                readOnly: this.fp.attr === 1,
+                isDraging: false
             }
         },
         methods: {
@@ -64,6 +65,29 @@
                     })
                 }
                 this.$store.commit('removeFilePropertiesById', this.index)
+            },
+            getMoveFile(event) {
+                let model = this.$refs.fileModel
+                let header = this.$refs.header
+                let mx = event.pageX
+                let my = event.pageY
+                let dx = model.offsetLeft
+                let dy = model.offsetTop
+                this.isDraging = true
+                header.onmousemove = (eve) => {
+                    let e = eve || window.event
+                    let x = e.pageX
+                    let y = e.pageY
+                    if (this.isDraging) {
+                        let moveX = dx + x - mx
+                        let moveY = dy + y - my
+                        model.style.left = moveX + 'px'
+                        model.style.top = moveY + 'px'
+                    }
+                }
+                header.onmouseup = (eve) => {
+                    this.isDraging = false
+                }
             }
         },
         filters: {

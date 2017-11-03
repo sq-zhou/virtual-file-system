@@ -1,10 +1,10 @@
 <template>
     <transition name="slide-fade">
         <div class="add-file-frame">
-            <div class="file-model">
-                <div class="title">
+            <div class="file-model" ref="fileModel">
+                <div class="title" @mousedown="getMoveFile($event)" ref="header">
                     <span>{{ title }}</span>
-                    <span class="close fa fa-window-close" @click="modelClose()"></span>
+                    <span class="close fa fa-window-close" @click.stop="modelClose()"></span>
                 </div>
                 <div class="operation">
                     <i class="fa fa-save" @click="saveText" title="保存"></i>
@@ -29,7 +29,8 @@
         props: ['fileItem', 'index'],
         data() {
             return {
-                contentBuffer: ''
+                contentBuffer: '',
+                isDraging: false
             }
         },
         computed: {
@@ -53,6 +54,29 @@
                     path: this.fileItem.path,
                     content: this.contentBuffer
                 })
+            },
+            getMoveFile(event) {
+                let model = this.$refs.fileModel
+                let header = this.$refs.header
+                let mx = event.pageX
+                let my = event.pageY
+                let dx = model.offsetLeft
+                let dy = model.offsetTop
+                this.isDraging = true
+                header.onmousemove = (eve) => {
+                    let e = eve || window.event
+                    let x = e.pageX
+                    let y = e.pageY
+                    if (this.isDraging) {
+                        let moveX = dx + x - mx
+                        let moveY = dy + y - my
+                        model.style.left = moveX + 'px'
+                        model.style.top = moveY + 'px'
+                    }
+                }
+                header.onmouseup = (eve) => {
+                    this.isDraging = false
+                }
             }
         }
     }
@@ -81,6 +105,7 @@
             font-size: 14px
             color: white
             background: dimgrey
+            cursor: default
             .close
                 position: absolute
                 top: 5px
