@@ -79,6 +79,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
     .fileProperty-wrapper
+        opacity: 0.85
         position: fixed
         left: 50%
         top: 50%
@@ -86,7 +87,7 @@
         height: 326px
         transform: translateX(-50%) translateY(-50%)
         background: #ffffff
-        box-shadow: 0 0 6px 2px #0bb0e6
+        box-shadow: 0 0 6px 2px #97D9D7
         border: 1px solid #fff
         z-index: 1000
         .header
@@ -151,9 +152,9 @@
         background: #4b4149
         opacity: 0.3
     .slide-fade-enter-active 
-        transition: opacity .5s
+        transition: opacity .3s
     .slide-fade-leave-active
-        transition: opacity .5s
+        transition: opacity .3s
     .slide-fade-enter, .slide-fade-leave-to
         opacity: 0
 </style>

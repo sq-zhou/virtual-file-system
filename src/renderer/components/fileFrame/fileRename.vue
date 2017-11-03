@@ -130,9 +130,9 @@
         background: #4b4149
         opacity: 0.3
     .slide-fade-enter-active 
-        transition: opacity .5s
+        transition: opacity .3s
     .slide-fade-leave-active
-        transition: opacity .5s
+        transition: opacity .3s
     .slide-fade-enter, .slide-fade-leave-to
         opacity: 0
 </style>

@@ -60,6 +60,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
     .file-model
+        opacity: 0.85
         position: fixed
         top: 50%
         left: 50%
@@ -72,7 +73,7 @@
         backface-visibility: visible
         transform: translateX(-50%) translateY(-50%)
         background #ffffff
-        box-shadow: 0 0 6px 2px #0bb0e6
+        box-shadow: 0 0 6px 2px #97D9D7
         border 1px solid #ffffff
         .title
             position relative
@@ -123,9 +124,9 @@
             .content-text::-webkit-scrollbar-thumb
                 background-color: #ada3ab
     .slide-fade-enter-active 
-        transition: opacity .5s
+        transition: opacity .3s
     .slide-fade-leave-active
-        transition: opacity .5s
+        transition: opacity .3s
     .slide-fade-enter, .slide-fade-leave-to
         opacity: 0
 </style>

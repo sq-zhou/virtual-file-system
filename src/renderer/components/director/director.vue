@@ -26,6 +26,8 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
     .director
+        background: url('../../assets/bg.jpg')
+        background-size: 100% 100%
         height: 100%;
         .dir-inner
             padding: 0

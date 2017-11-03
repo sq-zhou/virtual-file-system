@@ -49,6 +49,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
     .nav-header
+        opacity: 0.75
         display: flex
         align-items: center
         width: 100%
