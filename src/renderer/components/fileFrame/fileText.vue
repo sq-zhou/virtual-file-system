@@ -23,7 +23,7 @@
 
 <script>
     import * as path from 'path'
-
+    import {MoveFrame} from '../../common/frameMove'
     export default {
         name: 'add-file-frame',
         props: ['fileItem', 'index'],
@@ -58,25 +58,7 @@
             getMoveFile(event) {
                 let model = this.$refs.fileModel
                 let header = this.$refs.header
-                let mx = event.pageX
-                let my = event.pageY
-                let dx = model.offsetLeft
-                let dy = model.offsetTop
-                this.isDraging = true
-                header.onmousemove = (eve) => {
-                    let e = eve || window.event
-                    let x = e.pageX
-                    let y = e.pageY
-                    if (this.isDraging) {
-                        let moveX = dx + x - mx
-                        let moveY = dy + y - my
-                        model.style.left = moveX + 'px'
-                        model.style.top = moveY + 'px'
-                    }
-                }
-                header.onmouseup = (eve) => {
-                    this.isDraging = false
-                }
+                MoveFrame(model, header, 1000, this.isDraging)
             }
         }
     }
@@ -92,7 +74,7 @@
         max-width: 630px
         min-width: 320px
         height: auto
-        z-index: 2000
+        z-index: 1000
         visibility: visible
         backface-visibility: visible
         transform: translateX(-50%) translateY(-50%)

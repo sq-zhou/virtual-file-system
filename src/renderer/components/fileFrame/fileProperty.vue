@@ -40,12 +40,12 @@
                     <!-- <span class="cancel">取消</span> -->
                 </div>
             </div>
-            <div class="fileProperty-fade"></div>
         </div>
     </transition>
 </template>
 
 <script>
+    import {MoveFrame} from '../../common/frameMove'
     export default {
         name: 'fileProperty',
         props: ['fp', 'index'],
@@ -69,25 +69,7 @@
             getMoveFile(event) {
                 let model = this.$refs.fileModel
                 let header = this.$refs.header
-                let mx = event.pageX
-                let my = event.pageY
-                let dx = model.offsetLeft
-                let dy = model.offsetTop
-                this.isDraging = true
-                header.onmousemove = (eve) => {
-                    let e = eve || window.event
-                    let x = e.pageX
-                    let y = e.pageY
-                    if (this.isDraging) {
-                        let moveX = dx + x - mx
-                        let moveY = dy + y - my
-                        model.style.left = moveX + 'px'
-                        model.style.top = moveY + 'px'
-                    }
-                }
-                header.onmouseup = (eve) => {
-                    this.isDraging = false
-                }
+                MoveFrame(model, header, 2000, this.isDraging)
             }
         },
         filters: {
@@ -113,7 +95,7 @@
         background: #ffffff
         box-shadow: 0 0 6px 2px #97D9D7
         border: 1px solid #fff
-        z-index: 1000
+        z-index: 2000
         .header
             width: 100%
             height: 33px
@@ -121,6 +103,7 @@
             font-size: 14px
             background: dimgrey
             color: #ffffff
+            cursor: default
             span 
                 margin: 0 5px 0 13px
             .close
@@ -147,7 +130,7 @@
                     input
                         display: inline-block
                         vertical-align: top
-                        margin : 4px 5px 0 15px
+                        margin: 4px 5px 0 15px
                         box-sizing:border-box
                 .line
                     margin: 3px 0
@@ -165,16 +148,6 @@
                 font-size: 14px
                 cursor: pointer
                 user-select: none
-    .fileProperty-fade
-        display:none
-        position: fixed
-        top: 0
-        left: 0
-        width: 100%
-        height: 100%
-        z-index: 800
-        background: #4b4149
-        opacity: 0.3
     .slide-fade-enter-active 
         transition: opacity .3s
     .slide-fade-leave-active
