@@ -55,7 +55,6 @@ let pathHistory = [
     '/'
 ]
 
-// 然后给 actions 注册一个事件处理函数，当这个函数被触发时，将状态提交到 mutaions中处理
 const actions = {
     changeAttr({commit}, {path, attr}) {
         zfs.changeAttr(path, attr)
@@ -159,7 +158,7 @@ const actions = {
         commit('setSelectedIndex', -1)
     }
 }
-// 更新状态
+
 const mutations = {
     setCopyPath(state, path) {
         state.copyPath = path
@@ -213,14 +212,11 @@ const mutations = {
         state.fileItems = fileItems
     }
 }
-// 获取状态信息
+
 const getter = {
-    showState(state) {
-        console.log(state.msg)
-    }
+    showState(state) {}
 }
 
-// 下面这个相当关键了，所有模块，记住是所有，注册才能使用
 export default new Vuex.Store({
     state,
     getter,
